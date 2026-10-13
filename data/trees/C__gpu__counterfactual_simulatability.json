@@ -1,0 +1,363 @@
+{
+ "tree_id": "C/gpu/counterfactual_simulatability",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "counterfactual_simulatability",
+ "question": "Do natural-language explanations improve counterfactual simulation of model behavior?",
+ "source_format": "merged_7type",
+ "nodes": {
+  "ROOT": {
+   "id": "ROOT",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "complete",
+   "current_hypothesis": "Do natural-language explanations improve counterfactual simulation of model behavior?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Model proxies do not establish human performance."
+   ],
+   "tools_called": ""
+  },
+  "Q_NLI": {
+   "id": "Q_NLI",
+   "parent": "ROOT",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=Q_NLI",
+   "current_hypothesis": "Explanations may help predict NLI decisions after negation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "BUDGET_INITIAL": {
+   "id": "BUDGET_INITIAL",
+   "parent": "ROOT",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "A small paired experiment can fit the lifetime cap.",
+   "key_evidence": [
+    "Reported usage $0; remaining $5."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Agent calls share cap; API estimates depend on prompt length."
+   ],
+   "tools_called": ""
+  },
+  "DESIGN": {
+   "id": "DESIGN",
+   "parent": "ROOT",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Relevant explanations improve exact agreement more than absent or shuffled explanations.",
+   "key_evidence": [
+    "Precommitted: 16 NLI + 16 QA examples; both requested target IDs; reciprocal other-model proxy; independent stateless paired calls; temperature 0; original + counterfactual target calls; no/true/shuffled explanation proxy calls.",
+    "Target receives identical task instructions on original and counterfactual; explanation never sees the counterfactual before generation.",
+    "Proxy sees original input/prediction and specified counterfactual input, target identity and output conventions, plus explanation only in explanation conditions.",
+    "Primary metric: within-item change in exact target-output agreement, with paired bootstrap CI and exact McNemar test; task/model strata reported separately.",
+    "QA normalization follows SQuAD punctuation/article/whitespace rules; NLI exact labels.",
+    "Shuffled explanation is next item in fixed cyclic task order; no outcomes used to select it.",
+    "Two repeated counterfactual targets per task/model for a small stability check."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Small convenience sample; proxy ceiling; different target/proxy pairs confound between-target comparisons; no human participants; edit validity requires audit."
+   ],
+   "tools_called": ""
+  },
+  "JOB_PREP_FAIL": {
+   "id": "JOB_PREP_FAIL",
+   "parent": "DESIGN",
+   "node_type": "EXPERIMENT",
+   "status": "pruned · 合并了 2 个同父同类节点，代表节点 id=JOB_PREP_FAIL",
+   "current_hypothesis": "Scheduled data preparation can run with the supplied wrapper.",
+   "key_evidence": [
+    "Job 1499986 failed before Python: CUDA_VISIBLE_DEVICES unset; no data or inference executed."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py submit",
+    "cluster_job.py wait",
+    "own job stdout"
+   ]
+  },
+  "WRAPPER_FIX": {
+   "id": "WRAPPER_FIX",
+   "parent": "DESIGN",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 10 个同父同类节点，代表节点 id=WRAPPER_FIX",
+   "current_hypothesis": "API-only scheduled work can proceed without CUDA device access.",
+   "key_evidence": [
+    "Retain tracked helper submission and four-GPU resource request; use local template without requiring CUDA_VISIBLE_DEVICES; never set CUDA_VISIBLE_DEVICES or load GPU models."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Requested GPU resources are unused by API experiment."
+   ],
+   "tools_called": ""
+  },
+  "EXTRACT_NLI": {
+   "id": "EXTRACT_NLI",
+   "parent": "Q_NLI",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=EXTRACT_NLI",
+   "current_hypothesis": "Minimal auxiliary edits produce counterfactual NLI inputs.",
+   "key_evidence": [
+    "Selected 16 examples, original label counts {0: 6, 1: 5, 2: 5}; original validation ordering."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Original gold labels do not transfer to edited hypotheses; manually audit grammaticality."
+   ],
+   "tools_called": ""
+  },
+  "EXTRACT_QA_0": {
+   "id": "EXTRACT_QA_0",
+   "parent": "Q_NLI",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=EXTRACT_QA_0",
+   "current_hypothesis": "Construct paired QA input edits from answerable originals.",
+   "key_evidence": [
+    "Selected 4 unique contexts at offset 0."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Removal may retain inferable evidence; replacement can create unnatural facts."
+   ],
+   "tools_called": ""
+  },
+  "QA_LENGTH_REVISION": {
+   "id": "QA_LENGTH_REVISION",
+   "parent": "Q_NLI",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Allowing contexts up to 2000 characters supplies enough source examples.",
+   "key_evidence": [
+    "EU law contexts in downloaded offset 3000 generally exceed 1100 characters; revise before any model outcomes."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Longer prompts increase cost."
+   ],
+   "tools_called": ""
+  },
+  "RUN_nli": {
+   "id": "RUN_nli",
+   "parent": "Q_NLI",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Test paired counterfactual simulation with and without relevant explanations.",
+   "key_evidence": [
+    "16 audited examples; two reciprocal target/proxy pairs; temperature 0."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "RUN_qa": {
+   "id": "RUN_qa",
+   "parent": "Q_NLI",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Test paired counterfactual simulation with and without relevant explanations.",
+   "key_evidence": [
+    "16 audited examples; two reciprocal target/proxy pairs; temperature 0."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "CALL_m0_nli_0_original": {
+   "id": "CALL_m0_nli_0_original",
+   "parent": "RUN_nli",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 164 个同父同类节点，代表节点 id=CALL_m0_nli_0_original",
+   "current_hypothesis": "Observe a target response or independent proxy forecast.",
+   "key_evidence": [
+    "Model openai/gpt-3.5-turbo; stage target_original; condition None; item nli_0; artifact results/calls/m0_nli_0_original.json",
+    "Parsed prediction: entailment"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "CALL_m0_qa_0_original": {
+   "id": "CALL_m0_qa_0_original",
+   "parent": "RUN_qa",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 164 个同父同类节点，代表节点 id=CALL_m0_qa_0_original",
+   "current_hypothesis": "Observe a target response or independent proxy forecast.",
+   "key_evidence": [
+    "Model openai/gpt-3.5-turbo; stage target_original; condition None; item qa_0; artifact results/calls/m0_qa_0_original.json",
+    "Parsed prediction: France"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "RESULT_m0_nli": {
+   "id": "RESULT_m0_nli",
+   "parent": "RUN_nli",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=RESULT_m0_nli",
+   "current_hypothesis": "Relevant explanations improve counterfactual agreement.",
+   "key_evidence": [
+    "{\"n\": 16, \"accuracy\": {\"none\": 0.6875, \"true\": 0.6875, \"shuffled\": 0.75, \"copy\": 0.4375}, \"true_minus_none\": {\"delta\": 0.0, \"ci95\": [0.0, 0.0], \"wins\": 0, \"losses\": 0, \"mcnemar_p\": 1}, \"true_minus_shuffled\": {\"delta\": -0.0625, \"ci95\": [-0.1875, 0.0], \"wins\": 0, \"losses\": 1, \"mcnemar_p\": 1}, \"changed_n\": 9, \"changed_accuracy\": {\"none\": 0.7777777777777778, \"true\": 0.7777777777777778, \"shuffled\": 0.7777777777777778}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "16 examples per cell; purposive sample; narrow edit distribution."
+   ],
+   "tools_called": ""
+  },
+  "RESULT_m0_qa": {
+   "id": "RESULT_m0_qa",
+   "parent": "RUN_qa",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=RESULT_m0_qa",
+   "current_hypothesis": "Relevant explanations improve counterfactual agreement.",
+   "key_evidence": [
+    "{\"n\": 16, \"accuracy\": {\"none\": 0.625, \"true\": 0.625, \"shuffled\": 0.6875, \"copy\": 0.0}, \"true_minus_none\": {\"delta\": 0.0, \"ci95\": [0.0, 0.0], \"wins\": 0, \"losses\": 0, \"mcnemar_p\": 1}, \"true_minus_shuffled\": {\"delta\": -0.0625, \"ci95\": [-0.1875, 0.0], \"wins\": 0, \"losses\": 1, \"mcnemar_p\": 1}, \"changed_n\": 16, \"changed_accuracy\": {\"none\": 0.625, \"true\": 0.625, \"shuffled\": 0.6875}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "16 examples per cell; purposive sample; narrow edit distribution."
+   ],
+   "tools_called": ""
+  },
+  "EXTRACT_DISCORDANCES": {
+   "id": "EXTRACT_DISCORDANCES",
+   "parent": "DESIGN",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=EXTRACT_DISCORDANCES",
+   "current_hypothesis": "Observed effects involve both gains and errors.",
+   "key_evidence": [
+    "GPT-3.5 proxy of GPT-4: nli_5 and nli_11 improve; qa_0, qa_4, qa_14 improve; qa_2 worsens.",
+    "Example qa_2: GPT-4 target predicts 21st century; proxy without explanation agrees, with explanation predicts UNANSWERABLE.",
+    "Example qa_0: target GPT-4 predicts Veloria; proxy changes from UNANSWERABLE to Veloria with either true or shuffled explanation."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Examples are post-hoc interpretations, not causal mechanisms."
+   ],
+   "tools_called": ""
+  },
+  "REPORT_DECISION": {
+   "id": "REPORT_DECISION",
+   "parent": "WRAPPER_FIX",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Report the executed proxy study as complete while preserving scientific uncertainty.",
+   "key_evidence": [
+    "final_answer.md contains measured effects, both exact model IDs, sampling, deviations, failed jobs, cost, limitations, and further human work.",
+    "completion.json complete applies to the small protocol; all 328 planned calls and all 64 paired units executed."
+   ],
+   "lessons": [
+    "Insufficient evidence of benefit is distinct from evidence of no benefit."
+   ],
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "VALIDATION": {
+   "id": "VALIDATION",
+   "parent": "REPORT_DECISION",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "The handoff is internally consistent and complete.",
+   "key_evidence": [
+    "validate_artifacts.py passed: all 385 pre-verification nodes satisfy rooted-tree invariants; all 328 calls parsed and are linked to tree nodes; all 64 units have three proxy conditions; CSV agrees with summary.",
+    "All six research/validation scripts compile."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "python validate_artifacts.py",
+    "python -m py_compile"
+   ]
+  },
+  "Q_NLI__hyp": {
+   "id": "Q_NLI__hyp",
+   "parent": "ROOT",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=Q_NLI__hyp",
+   "current_hypothesis": "Explanations may help predict NLI decisions after negation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "JOB_PREP_FAIL__hyp": {
+   "id": "JOB_PREP_FAIL__hyp",
+   "parent": "DESIGN",
+   "node_type": "HYPOTHESIS",
+   "status": "pruned · 合并了 14 个同父同类节点，代表节点 id=JOB_PREP_FAIL__hyp",
+   "current_hypothesis": "Scheduled data preparation can run with the supplied wrapper.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "EXTRACT_NLI__hyp": {
+   "id": "EXTRACT_NLI__hyp",
+   "parent": "Q_NLI",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=EXTRACT_NLI__hyp",
+   "current_hypothesis": "Minimal auxiliary edits produce counterfactual NLI inputs.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "EXTRACT_QA_0__hyp": {
+   "id": "EXTRACT_QA_0__hyp",
+   "parent": "Q_NLI",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=EXTRACT_QA_0__hyp",
+   "current_hypothesis": "Construct paired QA input edits from answerable originals.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "CALL_m0_nli_0_original__hyp": {
+   "id": "CALL_m0_nli_0_original__hyp",
+   "parent": "RUN_nli",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=CALL_m0_nli_0_original__hyp",
+   "current_hypothesis": "Observe a target response or independent proxy forecast.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "REPORT_DECISION__hyp": {
+   "id": "REPORT_DECISION__hyp",
+   "parent": "WRAPPER_FIX",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Report the executed proxy study as complete while preserving scientific uncertainty.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "VALIDATION__hyp": {
+   "id": "VALIDATION__hyp",
+   "parent": "REPORT_DECISION",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "The handoff is internally consistent and complete.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

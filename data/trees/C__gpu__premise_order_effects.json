@@ -1,0 +1,727 @@
+{
+ "tree_id": "C/gpu/premise_order_effects",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "premise_order_effects",
+ "question": "Logically identical premise permutations may change LLM accuracy.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "R": {
+   "id": "R",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "needs_review",
+   "current_hypothesis": "Logically identical premise permutations may change LLM accuracy.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Five-dollar total budget; legacy model access"
+   ],
+   "tools_called": [
+    "controlled experiment"
+   ]
+  },
+  "Q1": {
+   "id": "Q1",
+   "parent": "R",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=Q1",
+   "current_hypothesis": "Within-problem accuracy variance can reveal order sensitivity.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "E1": {
+   "id": "E1",
+   "parent": "R",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=E1",
+   "current_hypothesis": "Requested OpenAI model IDs are available in catalog.",
+   "key_evidence": [
+    "GPT-4 price $30/M input and $60/M output; GPT-3.5 $0.50/M input and $1.50/M output."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Catalog listing does not guarantee successful inference."
+   ],
+   "tools_called": ""
+  },
+  "B1": {
+   "id": "B1",
+   "parent": "R",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=B1",
+   "current_hypothesis": "A 192-call/model short-answer study should fit the experimental allowance.",
+   "key_evidence": [
+    "Initial reported key usage $0; GPT-4 estimated ~192 calls x 160 input tokens x $0.00003 plus short outputs ≈ $0.96."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Agent calls share total budget; actual token count varies."
+   ],
+   "tools_called": ""
+  },
+  "J1": {
+   "id": "J1",
+   "parent": "Q1",
+   "node_type": "EXPERIMENT",
+   "status": "pruned",
+   "current_hypothesis": "Initial scheduled execution failed before running experiment.py.",
+   "key_evidence": [
+    "Job 1500632 left queue; no experiment artifacts produced.",
+    "Scheduler log: CUDA_VISIBLE_DEVICES: No GPUs were assigned by UGE.",
+    "Log copied to scheduler_failure.txt."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py submit/wait/status",
+    "own job log"
+   ]
+  },
+  "D1": {
+   "id": "D1",
+   "parent": "Q1",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Balanced valid/invalid chain deductions isolate premise order while keeping wording constant.",
+   "key_evidence": [
+    "32 problems: two quantifier families x four premise counts x four lexical variants; 16 valid and 16 invalid.",
+    "All permutations for n=2,3; three matched endpoint pairs for n=4,5; 160 unique ordered prompts plus 32 repeats per model.",
+    "Seed 73021; invalid items reverse one universal implication; no web or source-paper search."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Simple positive unary chains may produce ceiling effects.",
+    "Four variants per stratum give limited problem-level power."
+   ],
+   "tools_called": ""
+  },
+  "D2": {
+   "id": "D2",
+   "parent": "Q1",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Moving the query-adjacent last chain rule first versus last gives matched positional comparisons.",
+   "key_evidence": [
+    "Target premise index n-1; other premises retain the same order within pairs.",
+    "For n=3 include both middle-position permutations as well."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Target is operationally query-adjacent, not proven uniquely most relevant."
+   ],
+   "tools_called": ""
+  },
+  "D3": {
+   "id": "D3",
+   "parent": "Q1",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "One identical-prompt repeat per problem estimates backend instability at temperature zero.",
+   "key_evidence": [
+    "32 repeats per model occur after all unique prompts."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Only one repeat/order; temporal drift and rare stochastic differences remain possible."
+   ],
+   "tools_called": ""
+  },
+  "V1": {
+   "id": "V1",
+   "parent": "D1",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "An exhaustive unary-type oracle verifies all item labels.",
+   "key_evidence": [
+    "Enumerated 2^(n+1) unary types, filtered universal violations, and checked existential witness/countermodel feasibility for each of 32 problems.",
+    "All premise sets consistent; all formal entailment labels match intended validity."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Natural-language interpretation is assumed to follow the explicit quantifier definitions."
+   ],
+   "tools_called": [
+    "experiment.py:oracle"
+   ]
+  },
+  "A1": {
+   "id": "A1",
+   "parent": "V1",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=A1",
+   "current_hypothesis": "Measure accuracy and premise-order sensitivity on openai/gpt-3.5-turbo",
+   "key_evidence": [
+    "temperature=0; max_tokens=8; serial independent requests; no chat history."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference via OpenRouter"
+   ]
+  },
+  "A1E": {
+   "id": "A1E",
+   "parent": "A1",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "API run produced preserved responses.",
+   "key_evidence": [
+    "192/192 responses; cost $0.010252."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/responses.jsonl"
+   ]
+  },
+  "A2E": {
+   "id": "A2E",
+   "parent": "A1",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "API run produced preserved responses.",
+   "key_evidence": [
+    "192/192 responses; cost $0.599640."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/responses.jsonl"
+   ]
+  },
+  "L1": {
+   "id": "L1",
+   "parent": "R",
+   "node_type": "EXPERIMENT",
+   "status": "needs_review · 合并了 2 个同父同类节点，代表节点 id=L1",
+   "current_hypothesis": "Requested Llama 2 weights may be accessible for local evaluation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "HTTPS config access probe; Transformers if accessible"
+   ]
+  },
+  "L1F": {
+   "id": "L1F",
+   "parent": "L1",
+   "node_type": "EXPERIMENT",
+   "status": "pruned",
+   "current_hypothesis": "Requested Llama 2 model is inaccessible.",
+   "key_evidence": [
+    "HTTP 401 from requested HuggingFace config endpoint."
+   ],
+   "lessons": [
+    "No weight substitution; no local inference executed."
+   ],
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "AN1": {
+   "id": "AN1",
+   "parent": "V1",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=AN1",
+   "current_hypothesis": "Within-problem Bernoulli correctness variance and matched endpoint differences quantify observed order effects.",
+   "key_evidence": [
+    "results/summary.json and results/per_problem.csv saved.",
+    "Unique permutations only for primary accuracy; repeats analyzed separately; 10,000 problem bootstrap resamples and 20,000 problem sign flips, seed 2043."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Shared templates reduce generalizability; n=4,5 sampled endpoint permutations do not cover all positions.",
+    "With zero differences the bootstrap degenerates and does not prove equivalence."
+   ],
+   "tools_called": [
+    "analyze.py"
+   ]
+  },
+  "RES0": {
+   "id": "RES0",
+   "parent": "AN1",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=RES0",
+   "current_hypothesis": "Measured order sensitivity for openai/gpt-3.5-turbo",
+   "key_evidence": [
+    "{\"unique_calls\": 160, \"repeat_calls\": 32, \"problems\": 32, \"pooled_accuracy\": 0.6125, \"problem_weighted_accuracy\": 0.6354166666666666, \"correct\": 98, \"unparseable\": 0, \"sensitive_problems\": 6, \"sensitivity_rate\": 0.1875, \"mean_within_problem_accuracy_variance\": 0.03125, \"first_accuracy_problem_weighted\": 0.640625, \"last_accuracy_problem_weighted\": 0.6197916666666666, \"first_minus_last\": 0.02083333333333333, \"first_minus_last_bootstrap_95\": [-0.04166666666666667, 0.08854166666666666], \"first_last_signflip_p\": 0.6895155242237888, \"repeat_disagreements\": 0, \"repeat_pairs\": 32, \"repeat_accuracy\": 0.65625, \"validity_accuracy\": {\"True\": 0.975, \"False\": 0.25}}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/summary.json"
+   ]
+  },
+  "AN2": {
+   "id": "AN2",
+   "parent": "D2",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=AN2",
+   "current_hypothesis": "First-minus-last contrast is computed within problems and averaged equally.",
+   "key_evidence": [
+    "{\"openai/gpt-3.5-turbo\": {\"first_minus_last\": 0.02083333333333333, \"first_minus_last_bootstrap_95\": [-0.04166666666666667, 0.08854166666666666], \"first_last_signflip_p\": 0.6895155242237888}, \"openai/gpt-4\": {\"first_minus_last\": 1.734723475976807e-18, \"first_minus_last_bootstrap_95\": [-0.05208333333333333, 0.05208333333333334], \"first_last_signflip_p\": 1.0}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Intervals exploratory; problem templates are narrow and not an iid sample of all logical reasoning."
+   ],
+   "tools_called": ""
+  },
+  "AN3": {
+   "id": "AN3",
+   "parent": "D3",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=AN3",
+   "current_hypothesis": "Identical-prompt repeat disagreements quantify a limited baseline for output instability.",
+   "key_evidence": [
+    "{\"openai/gpt-3.5-turbo\": {\"repeat_pairs\": 32, \"repeat_disagreements\": 0}, \"openai/gpt-4\": {\"repeat_pairs\": 32, \"repeat_disagreements\": 1}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Single repeat per selected ordering cannot cleanly estimate the entire response distribution."
+   ],
+   "tools_called": ""
+  },
+  "U1": {
+   "id": "U1",
+   "parent": "AN3",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "Single-pass order variation may partly reflect backend response instability.",
+   "key_evidence": [
+    "GPT-4 changed 1/32 identical-prompt repeats; GPT-3.5 changed 0/32.",
+    "Primary accuracy varied on 6/32 GPT-3.5 and 8/32 GPT-4 problems."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Single observation per permutation is insufficient for deterministic causal attribution."
+   ],
+   "tools_called": ""
+  },
+  "J3": {
+   "id": "J3",
+   "parent": "Q1",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Revised tracked job completed successfully.",
+   "key_evidence": [
+    "Job 1500636 returncode 0; 384 successful API calls.",
+    "No local GPU model was loaded; HuggingFace config probe returned HTTP 401."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py wait",
+    "results model run files"
+   ]
+  },
+  "FU1": {
+   "id": "FU1",
+   "parent": "AN1",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Independent repeated measurements can test persistence of initially observed order variation.",
+   "key_evidence": [
+    "Three new calls for every original permutation on each initially sensitive problem (6 GPT-3.5, 8 GPT-4), plus four randomly selected nonsensitive n>=3 controls per model.",
+    "Selection and task shuffle seed 9517; analyze new calls alone; no change to primary estimates."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Post-selection sample cannot estimate population prevalence; three repeats per ordering still limited."
+   ],
+   "tools_called": ""
+  },
+  "FU2": {
+   "id": "FU2",
+   "parent": "FU1",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Three independent repeat calls per selected ordering were executed.",
+   "key_evidence": [
+    "{\"openai/gpt-3.5-turbo\": {\"calls\": 180, \"planned\": 180, \"problems\": 10, \"correct\": 96, \"stable_opposing_sensitive_problems\": 6, \"stable_opposing_control_problems\": 0, \"unstable_orderings\": 0, \"orderings\": 60, \"same_order_pair_disagreements\": 0, \"same_order_pairs\": 180, \"cost_usd\": 0.009846000000000004}, \"openai/gpt-4\": {\"calls\": 216, \"planned\": 216, \"problems\": 12, \"correct\": 178, \"stable_opposing_sensitive_problems\": 4, \"stable_opposing_control_problems\": 0, \"unstable_orderings\": 16, \"orderings\": 72, \"same_order_pair_disagreements\": 32, \"same_order_pairs\": 216, \"cost_usd\": 0.7147799999999996}}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "followup.py",
+    "results/followup_responses.jsonl"
+   ]
+  },
+  "FU3": {
+   "id": "FU3",
+   "parent": "FU2",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Within-order disagreements and independently repeated order contrasts quantify persistence.",
+   "key_evidence": [
+    "results/followup_per_problem.json contains per-order rates, permutation tests and Holm corrections across all follow-up problems."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Exchangeability assumes no time/provider drift; calls randomized but backend identity unavailable.",
+    "Stable opposing orders with only three draws do not alone prove determinism."
+   ],
+   "tools_called": [
+    "10,000 conditional label shuffles per problem; seed 5281"
+   ]
+  },
+  "V2": {
+   "id": "V2",
+   "parent": "FU3",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Independent oracle and artifact checks support the measured results.",
+   "key_evidence": [
+    "{\"problems\": 32, \"balanced_labels\": true, \"independent_oracle_agreement\": true, \"responses\": 780, \"calls_by_model\": {\"openai/gpt-3.5-turbo\": 372, \"openai/gpt-4\": 408}, \"prompt_content_preserved\": true, \"all_outputs_parseable\": true, \"experiment_cost_usd\": 1.3345179999999952}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Does not validate provider snapshot identity or generalization beyond the generated templates."
+   ],
+   "tools_called": [
+    "validate.py"
+   ]
+  },
+  "SY1": {
+   "id": "SY1",
+   "parent": "V2",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Premise order can change reasoning accuracy for fixed logical content in this study.",
+   "key_evidence": [
+    "Primary: 6/32 GPT-3.5 problems and 8/32 GPT-4 problems changed correctness across permutations.",
+    "New repeated calls: all 6 selected GPT-3.5 problems show at least one 0/3 and one 3/3 ordering; no within-order instability on its 60 tested orderings.",
+    "Two GPT-3.5 problems survive Holm correction across 22 exploratory follow-up tests (adjusted p≈0.0242 and 0.0294)."
+   ],
+   "lessons": [
+    "Repeated measurements strengthen the GPT-3.5 result; primary order variation alone can overstate stable sensitivity."
+   ],
+   "main_risk": [
+    "Narrow templates, small problem count, unknown provider revisions."
+   ],
+   "tools_called": ""
+  },
+  "SY2": {
+   "id": "SY2",
+   "parent": "AN2",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "No consistent first-versus-last advantage was established.",
+   "key_evidence": [
+    "GPT-3.5 equal-problem difference +2.08 percentage points; bootstrap 95% interval [-4.17,+8.85].",
+    "GPT-4 difference 0.00 points; interval [-5.21,+5.21]."
+   ],
+   "lessons": [
+    "Item-specific order effects can cancel in aggregate positional comparisons."
+   ],
+   "main_risk": [
+    "Intervals do not establish equivalence; target relevance is a proxy."
+   ],
+   "tools_called": ""
+  },
+  "SY3": {
+   "id": "SY3",
+   "parent": "FU3",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "GPT-4 evidence remains partly confounded by response instability.",
+   "key_evidence": [
+    "16/72 follow-up orderings varied across three calls; same-order pair disagreements 32/216 (pairs not independent).",
+    "Four of eight initially sensitive items had stable opposing orderings over three new calls, but no GPT-4 item survived Holm correction."
+   ],
+   "lessons": [
+    "Temperature zero did not guarantee reproducibility."
+   ],
+   "main_risk": [
+    "Insufficient repeats to distinguish small systematic effects from stochastic/provider variability."
+   ],
+   "tools_called": ""
+  },
+  "EX1": {
+   "id": "EX1",
+   "parent": "SY1",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "A concrete invalid universal deduction reliably flips with order under GPT-3.5.",
+   "key_evidence": [
+    "universal_4_2: premises All kivets are mips; All mips are flurps; All flurps are zorns; All wugs are zorns. Conclusion All kivets are wugs is not entailed.",
+    "Order [0,1,2,3] returned VALID originally and on all three new calls. Order [3,0,1,2] returned INVALID originally and on all three new calls."
+   ],
+   "lessons": [
+    "The exact same premise set can yield consistently different correctness."
+   ],
+   "main_risk": "",
+   "tools_called": [
+    "results/problems.json; primary and follow-up response artifacts"
+   ]
+  },
+  "LIM1": {
+   "id": "LIM1",
+   "parent": "SY1",
+   "node_type": "INFERENCE",
+   "status": "needs_review · 合并了 2 个同父同类节点，代表节点 id=LIM1",
+   "current_hypothesis": "The original five-model study remains incomplete.",
+   "key_evidence": [
+    "PaLM 2 and Gemini 1.0 Pro absent from exact catalog.",
+    "meta-llama/Llama-2-13b-chat-hf config returned HTTP 401; no local model loaded.",
+    "First scheduled attempt failed due missing CUDA_VISIBLE_DEVICES; subsequent API-only scheduled jobs succeeded."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Cannot extrapolate to requested unavailable models."
+   ],
+   "tools_called": ""
+  },
+  "hf_1503382_L1E": {
+   "id": "hf_1503382_L1E",
+   "parent": "L1",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Local requested model completed evaluation.",
+   "key_evidence": [
+    "192 responses; fp16; device_map=auto; greedy decoding."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "hf_1503382_RES0": {
+   "id": "hf_1503382_RES0",
+   "parent": "AN1",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=hf_1503382_RES0",
+   "current_hypothesis": "Measured order sensitivity for meta-llama/Llama-2-13b-chat-hf",
+   "key_evidence": [
+    "{\"unique_calls\": 160, \"repeat_calls\": 32, \"problems\": 32, \"pooled_accuracy\": 0.0, \"problem_weighted_accuracy\": 0.0, \"correct\": 0, \"unparseable\": 192, \"sensitive_problems\": 0, \"sensitivity_rate\": 0.0, \"mean_within_problem_accuracy_variance\": 0.0, \"first_accuracy_problem_weighted\": 0.0, \"last_accuracy_problem_weighted\": 0.0, \"first_minus_last\": 0.0, \"first_minus_last_bootstrap_95\": [0.0, 0.0], \"first_last_signflip_p\": 1.0, \"repeat_disagreements\": 0, \"repeat_pairs\": 32, \"repeat_accuracy\": 0.0, \"validity_accuracy\": {\"True\": 0.0, \"False\": 0.0}, \"zero_sensitivity_one_sided95_upper_assuming_iid_problems\": 0.0893681989862648}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/summary.json"
+   ]
+  },
+  "Q1__hyp": {
+   "id": "Q1__hyp",
+   "parent": "R",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=Q1__hyp",
+   "current_hypothesis": "Within-problem accuracy variance can reveal order sensitivity.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "J1__hyp": {
+   "id": "J1__hyp",
+   "parent": "Q1",
+   "node_type": "HYPOTHESIS",
+   "status": "pruned · 合并了 3 个同父同类节点，代表节点 id=J1__hyp",
+   "current_hypothesis": "Initial scheduled execution failed before running experiment.py.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "D2__hyp": {
+   "id": "D2__hyp",
+   "parent": "Q1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Moving the query-adjacent last chain rule first versus last gives matched positional comparisons.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "D3__hyp": {
+   "id": "D3__hyp",
+   "parent": "Q1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "One identical-prompt repeat per problem estimates backend instability at temperature zero.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "V1__hyp": {
+   "id": "V1__hyp",
+   "parent": "D1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "An exhaustive unary-type oracle verifies all item labels.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "A1__hyp": {
+   "id": "A1__hyp",
+   "parent": "V1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=A1__hyp",
+   "current_hypothesis": "Measure accuracy and premise-order sensitivity on openai/gpt-3.5-turbo",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "A1E__hyp": {
+   "id": "A1E__hyp",
+   "parent": "A1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "API run produced preserved responses.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "L1F__hyp": {
+   "id": "L1F__hyp",
+   "parent": "L1",
+   "node_type": "HYPOTHESIS",
+   "status": "pruned",
+   "current_hypothesis": "Requested Llama 2 model is inaccessible.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "RES0__hyp": {
+   "id": "RES0__hyp",
+   "parent": "AN1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=RES0__hyp",
+   "current_hypothesis": "Measured order sensitivity for openai/gpt-3.5-turbo",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "AN2__hyp": {
+   "id": "AN2__hyp",
+   "parent": "D2",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "First-minus-last contrast is computed within problems and averaged equally.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "AN3__hyp": {
+   "id": "AN3__hyp",
+   "parent": "D3",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Identical-prompt repeat disagreements quantify a limited baseline for output instability.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "U1__hyp": {
+   "id": "U1__hyp",
+   "parent": "AN3",
+   "node_type": "HYPOTHESIS",
+   "status": "needs_review",
+   "current_hypothesis": "Single-pass order variation may partly reflect backend response instability.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "FU2__hyp": {
+   "id": "FU2__hyp",
+   "parent": "FU1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Three independent repeat calls per selected ordering were executed.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "FU3__hyp": {
+   "id": "FU3__hyp",
+   "parent": "FU2",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Within-order disagreements and independently repeated order contrasts quantify persistence.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "V2__hyp": {
+   "id": "V2__hyp",
+   "parent": "FU3",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=V2__hyp",
+   "current_hypothesis": "Independent oracle and artifact checks support the measured results.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "SY1__hyp": {
+   "id": "SY1__hyp",
+   "parent": "V2",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Premise order can change reasoning accuracy for fixed logical content in this study.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "SY2__hyp": {
+   "id": "SY2__hyp",
+   "parent": "AN2",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "No consistent first-versus-last advantage was established.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "EX1__hyp": {
+   "id": "EX1__hyp",
+   "parent": "SY1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=EX1__hyp",
+   "current_hypothesis": "A concrete invalid universal deduction reliably flips with order under GPT-3.5.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "hf_1503382_L1E__hyp": {
+   "id": "hf_1503382_L1E__hyp",
+   "parent": "L1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Local requested model completed evaluation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "hf_1503382_RES0__hyp": {
+   "id": "hf_1503382_RES0__hyp",
+   "parent": "AN1",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Measured order sensitivity for meta-llama/Llama-2-13b-chat-hf",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

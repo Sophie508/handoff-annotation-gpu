@@ -1,0 +1,3486 @@
+{
+ "tree_id": "C/gpu/llms_lack_self_correction",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "llms_lack_self_correction",
+ "question": "Measure the effect of two rounds of intrinsic self-correction on exact match across three reasoning domains.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "root": {
+   "id": "root",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "complete",
+   "current_hypothesis": "Measure the effect of two rounds of intrinsic self-correction on exact match across three reasoning domains.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Legacy access and $5 total budget may prevent full experiment."
+   ],
+   "tools_called": [
+    "User task"
+   ]
+  },
+  "resources": {
+   "id": "resources",
+   "parent": "root",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=resources",
+   "current_hypothesis": "Which requested models and data can be accessed within the assigned resources?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "budget0": {
+   "id": "budget0",
+   "parent": "resources",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=budget0",
+   "current_hypothesis": "Establish starting credit.",
+   "key_evidence": [
+    "Reported usage $0; remaining $5."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "python tools/budget_status.py"
+   ]
+  },
+  "design": {
+   "id": "design",
+   "parent": "root",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Compare intrinsic self-correction with independent resampling across domains.",
+   "key_evidence": [
+    "Prospective settings in plan.md; 300 calls per GPT-3.5 model, up to 72 GPT-4 calls; temperature 1; two correction rounds."
+   ],
+   "lessons": [
+    "Pinned Hotpot has distractor contexts; include all passages, withhold supporting-fact labels."
+   ],
+   "main_risk": [
+    "Limited GPT-4 sample; unavailable preview; potential HF gates."
+   ],
+   "tools_called": [
+    "plan.md",
+    "experiment.py"
+   ]
+  },
+  "budget_estimate": {
+   "id": "budget_estimate",
+   "parent": "design",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=budget_estimate",
+   "current_hypothesis": "Fit serial trials while retaining analysis credit.",
+   "key_evidence": [
+    "Cheap models: 600 calls total; GPT-4: up to 72. Each item gets a conservative char-based cost reservation; stop at projected $3.65 usage."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Character approximation is not exact token counting."
+   ],
+   "tools_called": [
+    "Catalog per-token prices"
+   ]
+  },
+  "job_1500538": {
+   "id": "job_1500538",
+   "parent": "design",
+   "node_type": "EXPERIMENT",
+   "status": "pruned",
+   "current_hypothesis": "Run scheduled four-GPU experiment.",
+   "key_evidence": [
+    "Job 1500538 left queue before Python started.",
+    "Task job log: CUDA_VISIBLE_DEVICES: No GPUs were assigned by UGE.",
+    "No results directory; no model inference executed."
+   ],
+   "lessons": [
+    "The mandatory template refuses to run without scheduler-provided GPU visibility; do not set device IDs manually."
+   ],
+   "main_risk": "",
+   "tools_called": [
+    "tools/cluster_job.py submit/wait/status",
+    "Own registered job log"
+   ]
+  },
+  "job_1500539": {
+   "id": "job_1500539",
+   "parent": "budget_estimate",
+   "node_type": "EXPERIMENT",
+   "status": "pruned",
+   "current_hypothesis": "Retry tracked scheduled experiment.",
+   "key_evidence": [
+    "Job 1500539 failed at the same CUDA_VISIBLE_DEVICES guard before Python."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py",
+    "Own job log"
+   ]
+  },
+  "run_gpt-3.5-turbo": {
+   "id": "run_gpt-3.5-turbo",
+   "parent": "root",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=run_gpt-3.5-turbo",
+   "current_hypothesis": "Estimate paired self-correction effects for openai/gpt-3.5-turbo",
+   "key_evidence": [
+    "25 items/domain for each GPT-3.5; up to 6/domain for GPT-4; four calls per item."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "One stochastic trajectory per question at temperature 1."
+   ],
+   "tools_called": [
+    "Scheduled experiment.py",
+    "OpenRouter"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_0": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_0",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 75 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_0",
+   "current_hypothesis": "Run paired four-call trial.",
+   "key_evidence": [
+    "gsm8k index 1055; model openai/gpt-3.5-turbo; temperature 1; gold withheld."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_0_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_0_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='James pays $2304 a year for insurance.'; gold='2304'; EM=False",
+    "Full response in results/calls.jsonl; input=76, output=63"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_0_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_0_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='B. millions of cells'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=88, output=71"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_0_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_0_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='To SquarePants or Not to SquarePants'; gold='To SquarePants or Not to SquarePants'; EM=True",
+    "Full response in results/calls.jsonl; input=1657, output=109"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_1_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_1_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='762'; gold='762'; EM=True",
+    "Full response in results/calls.jsonl; input=109, output=52"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_1_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_1_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A'; gold='A'; EM=True",
+    "Full response in results/calls.jsonl; input=77, output=67"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_1_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_1_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Virginia'; gold='Virginia'; EM=True",
+    "Full response in results/calls.jsonl; input=1382, output=14"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_2_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_2_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='The average enrollment at Norman High School is 1000 students greater than Butler High School.'; gold='1000'; EM=False",
+    "Full response in results/calls.jsonl; input=96, output=65"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_2_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_2_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=74, output=79"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_2_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_2_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='The Bears'; EM=False",
+    "Full response in results/calls.jsonl; input=1049, output=14"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_3_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_3_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='34'; gold='34'; EM=True",
+    "Full response in results/calls.jsonl; input=87, output=72"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_3_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_3_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=72, output=41"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_3_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_3_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Minnesota'; gold='Minnesota'; EM=True",
+    "Full response in results/calls.jsonl; input=1603, output=22"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_4_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_4_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the numerical answer'; gold='360'; EM=False",
+    "Full response in results/calls.jsonl; input=59, output=87"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_4_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_4_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=68, output=37"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_4_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_4_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='2016 Cannes Film Festival'; gold='69th Cannes Film Festival'; EM=False",
+    "Full response in results/calls.jsonl; input=1625, output=22"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_5_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_5_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$125,000/year'; gold='25000'; EM=False",
+    "Full response in results/calls.jsonl; input=98, output=91"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_5_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_5_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C. funnel'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=82, output=50"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_5_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_5_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Adam Levine'; gold='Adam Levine'; EM=True",
+    "Full response in results/calls.jsonl; input=1345, output=20"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_6_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_6_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$96.'; gold='96'; EM=False",
+    "Full response in results/calls.jsonl; input=100, output=76"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_6_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_6_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=79, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_6_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_6_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='Ricard Rubio i Vives'; EM=False",
+    "Full response in results/calls.jsonl; input=1796, output=36"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_7_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_7_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='5760 coins.'; gold='5760'; EM=False",
+    "Full response in results/calls.jsonl; input=88, output=67"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_7_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_7_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=73, output=30"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_7_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_7_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Baltimore, Maryland'; gold='the port of Baltimore west to Sandy Hook'; EM=False",
+    "Full response in results/calls.jsonl; input=2047, output=29"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_8_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_8_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='each pair of contacts will cost $1.00.'; gold='2'; EM=False",
+    "Full response in results/calls.jsonl; input=87, output=71"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_8_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_8_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=75, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_8_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_8_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='six'; EM=False",
+    "Full response in results/calls.jsonl; input=1177, output=12"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_9_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_9_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='The Mastiff weighed 110 pounds.'; gold='220'; EM=False",
+    "Full response in results/calls.jsonl; input=154, output=43"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_9_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_9_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=71, output=46"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_9_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_9_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Shukratara'; gold='Shukratara'; EM=True",
+    "Full response in results/calls.jsonl; input=1244, output=54"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_10_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_10_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='440.'; gold='320'; EM=False",
+    "Full response in results/calls.jsonl; input=152, output=97"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_10_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_10_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=79, output=31"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_10_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_10_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Oneida Limited'; gold='Oneida Limited'; EM=True",
+    "Full response in results/calls.jsonl; input=1557, output=42"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_11_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_11_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='25'; gold='25'; EM=True",
+    "Full response in results/calls.jsonl; input=65, output=44"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_11_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_11_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=68, output=40"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_11_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_11_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='Oklahoma Sooners'; EM=False",
+    "Full response in results/calls.jsonl; input=1415, output=20"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_12_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_12_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Mr. Marcellus got $5600 in refunds.'; gold='5600'; EM=False",
+    "Full response in results/calls.jsonl; input=118, output=60"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_12_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_12_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D. lobby'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=80, output=54"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_12_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_12_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='No'; gold='no'; EM=True",
+    "Full response in results/calls.jsonl; input=1036, output=25"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_13_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_13_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='11'; EM=False",
+    "Full response in results/calls.jsonl; input=85, output=58"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_13_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_13_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=77, output=62"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_13_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_13_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='Roman'; EM=False",
+    "Full response in results/calls.jsonl; input=1418, output=29"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_14_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_14_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='280'; gold='280'; EM=True",
+    "Full response in results/calls.jsonl; input=89, output=36"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_14_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_14_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=69, output=48"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_14_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_14_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Loughborough University'; gold='Loughborough University'; EM=True",
+    "Full response in results/calls.jsonl; input=1027, output=55"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_15_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_15_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='31'; EM=False",
+    "Full response in results/calls.jsonl; input=93, output=43"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_15_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_15_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=94, output=27"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_15_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_15_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='chronological collection of critical quotations'; EM=False",
+    "Full response in results/calls.jsonl; input=1040, output=60"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_16_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_16_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='90'; EM=False",
+    "Full response in results/calls.jsonl; input=92, output=74"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_16_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_16_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=78, output=39"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_16_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_16_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Jonny Craig'; gold='Jonny\" Craig'; EM=True",
+    "Full response in results/calls.jsonl; input=1124, output=69"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_17_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_17_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='10'; gold='10'; EM=True",
+    "Full response in results/calls.jsonl; input=97, output=51"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_17_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_17_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (A)'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=82, output=50"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_17_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_17_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Larnelle Harris'; gold='Larnelle Harris'; EM=True",
+    "Full response in results/calls.jsonl; input=1527, output=24"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_18_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_18_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=\"Mr. Tan's net proceeds from selling the house is $118,000.\"; gold='118000'; EM=False",
+    "Full response in results/calls.jsonl; input=110, output=135"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_18_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_18_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C. Sing'; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=78, output=46"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_18_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_18_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='writers/novelists'; gold='author'; EM=False",
+    "Full response in results/calls.jsonl; input=1195, output=54"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_19_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_19_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Each student raised $6250.'; gold='6,250'; EM=False",
+    "Full response in results/calls.jsonl; input=86, output=64"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_19_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_19_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=79, output=37"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_19_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_19_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='Hawaii County'; EM=False",
+    "Full response in results/calls.jsonl; input=1133, output=18"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_20_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_20_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the numerical answer'; gold='2280'; EM=False",
+    "Full response in results/calls.jsonl; input=89, output=73"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_20_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_20_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=73, output=35"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_20_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_20_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='January 10, 1920'; gold='10 January 1920'; EM=False",
+    "Full response in results/calls.jsonl; input=1408, output=39"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_21_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_21_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$75'; gold='75'; EM=True",
+    "Full response in results/calls.jsonl; input=89, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_21_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_21_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=74, output=55"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_21_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_21_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=\"Papa Gino's\"; gold=\"Papa Gino's\"; EM=True",
+    "Full response in results/calls.jsonl; input=1075, output=46"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_22_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_22_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='10 packs.'; gold='10'; EM=False",
+    "Full response in results/calls.jsonl; input=82, output=43"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_22_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_22_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=71, output=53"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_22_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_22_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Opry Mills is a super-regional shopping mall in Nashville, Tennessee.'; gold='super-regional shopping mall'; EM=False",
+    "Full response in results/calls.jsonl; input=3163, output=70"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_23_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_23_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$130'; gold='130'; EM=True",
+    "Full response in results/calls.jsonl; input=78, output=35"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_23_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_23_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='B'; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=75, output=40"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_23_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_23_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Yes'; gold='no'; EM=False",
+    "Full response in results/calls.jsonl; input=1528, output=28"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_gsm8k_24_baseline": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_24_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the numerical answer'; gold='14'; EM=False",
+    "Full response in results/calls.jsonl; input=125, output=91"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_commonsenseqa_24_baseline": {
+   "id": "trial_gpt-3.5-turbo_commonsenseqa_24_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_commonsenseqa_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=71, output=32"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo_hotpotqa_24_baseline": {
+   "id": "trial_gpt-3.5-turbo_hotpotqa_24_baseline",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_hotpotqa_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='1978'; gold='1978'; EM=True",
+    "Full response in results/calls.jsonl; input=2043, output=30"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_0": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 75 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "current_hypothesis": "Run paired four-call trial.",
+   "key_evidence": [
+    "gsm8k index 1055; model openai/gpt-3.5-turbo-0613; temperature 1; gold withheld."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_0_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_0_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='2304'; gold='2304'; EM=True",
+    "Full response in results/calls.jsonl; input=75, output=77"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_0_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_0_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (A)'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=87, output=88"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_0_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_0_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='To SquarePants or Not to SquarePants'; gold='To SquarePants or Not to SquarePants'; EM=True",
+    "Full response in results/calls.jsonl; input=1642, output=121"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_1_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_1_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='762'; gold='762'; EM=True",
+    "Full response in results/calls.jsonl; input=108, output=73"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_1_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_1_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter A'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=76, output=83"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_1_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_1_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Virginia'; gold='Virginia'; EM=True",
+    "Full response in results/calls.jsonl; input=1362, output=51"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_2_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_2_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='1000'; gold='1000'; EM=True",
+    "Full response in results/calls.jsonl; input=95, output=80"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_2_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_2_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='C'; EM=True",
+    "Full response in results/calls.jsonl; input=74, output=80"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_2_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_2_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Bear'; gold='The Bears'; EM=False",
+    "Full response in results/calls.jsonl; input=1009, output=31"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_3_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_3_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='34'; gold='34'; EM=True",
+    "Full response in results/calls.jsonl; input=86, output=72"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_3_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_3_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (A-E)'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=71, output=72"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_3_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_3_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Minnesota'; gold='Minnesota'; EM=True",
+    "Full response in results/calls.jsonl; input=1525, output=26"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_4_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_4_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='360'; gold='360'; EM=True",
+    "Full response in results/calls.jsonl; input=58, output=76"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_4_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_4_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter E'; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=66, output=67"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_4_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_4_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Cannes Film Festival'; gold='69th Cannes Film Festival'; EM=False",
+    "Full response in results/calls.jsonl; input=1579, output=53"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_5_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_5_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='25000'; gold='25000'; EM=True",
+    "Full response in results/calls.jsonl; input=97, output=93"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_5_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_5_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='C'; EM=True",
+    "Full response in results/calls.jsonl; input=81, output=104"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_5_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_5_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Adam Levine'; gold='Adam Levine'; EM=True",
+    "Full response in results/calls.jsonl; input=1331, output=78"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_6_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_6_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='96'; gold='96'; EM=True",
+    "Full response in results/calls.jsonl; input=99, output=100"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_6_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_6_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D'; gold='D'; EM=True",
+    "Full response in results/calls.jsonl; input=78, output=73"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_6_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_6_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Ricky Rubio'; gold='Ricard Rubio i Vives'; EM=False",
+    "Full response in results/calls.jsonl; input=1747, output=65"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_7_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_7_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='5760'; gold='5760'; EM=True",
+    "Full response in results/calls.jsonl; input=86, output=98"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_7_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_7_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (A-E)'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=72, output=60"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_7_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_7_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Maryland'; gold='the port of Baltimore west to Sandy Hook'; EM=False",
+    "Full response in results/calls.jsonl; input=2025, output=35"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_8_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_8_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='2'; gold='2'; EM=True",
+    "Full response in results/calls.jsonl; input=86, output=92"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_8_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_8_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (C)'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=73, output=101"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_8_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_8_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_8_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='6'; gold='six'; EM=False",
+    "Full response in results/calls.jsonl; input=1142, output=49"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_9_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_9_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='220'; gold='220'; EM=True",
+    "Full response in results/calls.jsonl; input=150, output=83"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_9_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_9_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter B'; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=70, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_9_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_9_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_9_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Shukratara'; gold='Shukratara'; EM=True",
+    "Full response in results/calls.jsonl; input=1187, output=45"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_10_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_10_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='320'; gold='320'; EM=True",
+    "Full response in results/calls.jsonl; input=151, output=81"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_10_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_10_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D'; gold='D'; EM=True",
+    "Full response in results/calls.jsonl; input=77, output=78"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_10_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_10_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_10_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Oneida Limited'; gold='Oneida Limited'; EM=True",
+    "Full response in results/calls.jsonl; input=1529, output=83"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_11_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_11_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='25'; gold='25'; EM=True",
+    "Full response in results/calls.jsonl; input=64, output=56"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_11_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_11_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A'; gold='A'; EM=True",
+    "Full response in results/calls.jsonl; input=67, output=68"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_11_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_11_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_11_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Oklahoma Sooners'; gold='Oklahoma Sooners'; EM=True",
+    "Full response in results/calls.jsonl; input=1411, output=66"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_12_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_12_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='5600'; gold='5600'; EM=True",
+    "Full response in results/calls.jsonl; input=117, output=87"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_12_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_12_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (D)'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=79, output=92"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_12_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_12_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_12_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='No'; gold='no'; EM=True",
+    "Full response in results/calls.jsonl; input=1032, output=25"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_13_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_13_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='11'; gold='11'; EM=True",
+    "Full response in results/calls.jsonl; input=84, output=95"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_13_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_13_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A'; gold='A'; EM=True",
+    "Full response in results/calls.jsonl; input=74, output=55"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_13_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_13_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_13_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Roman Empire'; gold='Roman'; EM=False",
+    "Full response in results/calls.jsonl; input=1409, output=110"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_14_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_14_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='280'; gold='280'; EM=True",
+    "Full response in results/calls.jsonl; input=87, output=59"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_14_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_14_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='C'; EM=True",
+    "Full response in results/calls.jsonl; input=68, output=81"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_14_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_14_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_14_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Loughborough University'; gold='Loughborough University'; EM=True",
+    "Full response in results/calls.jsonl; input=1012, output=45"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_15_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_15_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='31'; gold='31'; EM=True",
+    "Full response in results/calls.jsonl; input=89, output=95"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_15_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_15_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (B)'; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=92, output=99"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_15_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_15_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_15_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=\"Timeline of Shakespeare criticism presented a chronological collection of critical quotations illustrating changing views on Shakespeare's works.\"; gold='chronological collection of critical quotations'; EM=False",
+    "Full response in results/calls.jsonl; input=1024, output=86"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_16_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_16_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='90'; gold='90'; EM=True",
+    "Full response in results/calls.jsonl; input=91, output=75"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_16_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_16_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D'; gold='D'; EM=True",
+    "Full response in results/calls.jsonl; input=76, output=60"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_16_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_16_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_16_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Jonny Craig'; gold='Jonny\" Craig'; EM=True",
+    "Full response in results/calls.jsonl; input=1081, output=120"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_17_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_17_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='10'; gold='10'; EM=True",
+    "Full response in results/calls.jsonl; input=96, output=83"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_17_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_17_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A'; gold='A'; EM=True",
+    "Full response in results/calls.jsonl; input=81, output=56"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_17_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_17_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_17_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Larnelle Harris'; gold='Larnelle Harris'; EM=True",
+    "Full response in results/calls.jsonl; input=1498, output=31"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_18_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_18_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='118000'; gold='118000'; EM=True",
+    "Full response in results/calls.jsonl; input=109, output=104"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_18_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_18_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter E'; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=76, output=79"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_18_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_18_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_18_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Writers'; gold='author'; EM=False",
+    "Full response in results/calls.jsonl; input=1184, output=64"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_19_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_19_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='6250'; gold='6,250'; EM=True",
+    "Full response in results/calls.jsonl; input=85, output=63"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_19_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_19_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (B)'; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=78, output=65"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_19_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_19_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_19_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Hawaii County'; gold='Hawaii County'; EM=True",
+    "Full response in results/calls.jsonl; input=1106, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_20_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_20_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='2180'; gold='2280'; EM=False",
+    "Full response in results/calls.jsonl; input=88, output=81"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_20_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_20_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D'; gold='D'; EM=True",
+    "Full response in results/calls.jsonl; input=72, output=66"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_20_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_20_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_20_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='January 10, 1920'; gold='10 January 1920'; EM=False",
+    "Full response in results/calls.jsonl; input=1376, output=42"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_21_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_21_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='75'; gold='75'; EM=True",
+    "Full response in results/calls.jsonl; input=88, output=56"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_21_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_21_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (A-E)'; gold='B'; EM=False",
+    "Full response in results/calls.jsonl; input=74, output=64"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_21_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_21_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_21_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=\"Papa Gino's\"; gold=\"Papa Gino's\"; EM=True",
+    "Full response in results/calls.jsonl; input=1048, output=56"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_22_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_22_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='10'; gold='10'; EM=True",
+    "Full response in results/calls.jsonl; input=81, output=49"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_22_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_22_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='E'; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=70, output=124"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_22_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_22_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_22_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='a super-regional shopping mall in Nashville, Tennessee.'; gold='super-regional shopping mall'; EM=False",
+    "Full response in results/calls.jsonl; input=889, output=75"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_23_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_23_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='130'; gold='130'; EM=True",
+    "Full response in results/calls.jsonl; input=77, output=82"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_23_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_23_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter (E)'; gold='E'; EM=False",
+    "Full response in results/calls.jsonl; input=75, output=105"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_23_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_23_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_23_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='No'; gold='no'; EM=True",
+    "Full response in results/calls.jsonl; input=1513, output=39"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_gsm8k_24_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_gsm8k_24_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_gsm8k_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='14'; gold='14'; EM=True",
+    "Full response in results/calls.jsonl; input=124, output=56"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_commonsenseqa_24_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_commonsenseqa_24_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_commonsenseqa_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the option letter A'; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=70, output=87"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-3.5-turbo-0613_hotpotqa_24_baseline": {
+   "id": "trial_gpt-3.5-turbo-0613_hotpotqa_24_baseline",
+   "parent": "trial_gpt-3.5-turbo-0613_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo-0613_hotpotqa_24_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='1978'; gold='1978'; EM=True",
+    "Full response in results/calls.jsonl; input=2001, output=47"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-3.5-turbo-0613",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_0": {
+   "id": "trial_gpt-4_gsm8k_0",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 18 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_0",
+   "current_hypothesis": "Run paired four-call trial.",
+   "key_evidence": [
+    "gsm8k index 1055; model openai/gpt-4; temperature 1; gold withheld."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "trial_gpt-4_gsm8k_0_baseline": {
+   "id": "trial_gpt-4_gsm8k_0_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$2,304.'; gold='2304'; EM=False",
+    "Full response in results/calls.jsonl; input=76, output=76"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_0_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_0_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='D'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=87, output=49"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_0_baseline": {
+   "id": "trial_gpt-4_hotpotqa_0_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_0_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='To SquarePants or Not to SquarePants.'; gold='To SquarePants or Not to SquarePants'; EM=True",
+    "Full response in results/calls.jsonl; input=1642, output=83"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_1_baseline": {
+   "id": "trial_gpt-4_gsm8k_1_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the numerical answer = 762'; gold='762'; EM=False",
+    "Full response in results/calls.jsonl; input=108, output=70"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_1_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_1_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A'; gold='A'; EM=True",
+    "Full response in results/calls.jsonl; input=76, output=76"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_1_baseline": {
+   "id": "trial_gpt-4_hotpotqa_1_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_1_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Virginia'; gold='Virginia'; EM=True",
+    "Full response in results/calls.jsonl; input=1362, output=44"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_2_baseline": {
+   "id": "trial_gpt-4_gsm8k_2_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='1000 students.'; gold='1000'; EM=False",
+    "Full response in results/calls.jsonl; input=96, output=72"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_2_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_2_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='C'; EM=True",
+    "Full response in results/calls.jsonl; input=74, output=54"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_2_baseline": {
+   "id": "trial_gpt-4_hotpotqa_2_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_2_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Information not provided in passages.'; gold='The Bears'; EM=False",
+    "Full response in results/calls.jsonl; input=1049, output=26"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_3_baseline": {
+   "id": "trial_gpt-4_gsm8k_3_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer=''; gold='34'; EM=False",
+    "Full response in results/calls.jsonl; input=86, output=106"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_3_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_3_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='A,B,E.'; gold='A'; EM=False",
+    "Full response in results/calls.jsonl; input=72, output=73"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_3_baseline": {
+   "id": "trial_gpt-4_hotpotqa_3_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_3_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Minnesota.'; gold='Minnesota'; EM=True",
+    "Full response in results/calls.jsonl; input=1603, output=20"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_4_baseline": {
+   "id": "trial_gpt-4_gsm8k_4_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='only the numerical answer: 360'; gold='360'; EM=False",
+    "Full response in results/calls.jsonl; input=58, output=106"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_4_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_4_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='B'; gold='B'; EM=True",
+    "Full response in results/calls.jsonl; input=66, output=35"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_4_baseline": {
+   "id": "trial_gpt-4_hotpotqa_4_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_4_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='2016 Cannes Film Festival.'; gold='69th Cannes Film Festival'; EM=False",
+    "Full response in results/calls.jsonl; input=1625, output=24"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_gsm8k_5_baseline": {
+   "id": "trial_gpt-4_gsm8k_5_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_gsm8k_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$75,000/year.'; gold='25000'; EM=False",
+    "Full response in results/calls.jsonl; input=98, output=86"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_commonsenseqa_5_baseline": {
+   "id": "trial_gpt-4_commonsenseqa_5_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_commonsenseqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='C'; EM=True",
+    "Full response in results/calls.jsonl; input=81, output=50"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_hotpotqa_5_baseline": {
+   "id": "trial_gpt-4_hotpotqa_5_baseline",
+   "parent": "trial_gpt-4_gsm8k_0",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_hotpotqa_5_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Adam Levine.'; gold='Adam Levine'; EM=True",
+    "Full response in results/calls.jsonl; input=1345, output=39"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "first_run_complete": {
+   "id": "first_run_complete",
+   "parent": "design",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Complete initial API evaluation.",
+   "key_evidence": [
+    "Job 1500540 exit 0; 168 complete trials; 672 model calls.",
+    "75 questions each GPT-3.5 variant; 18 GPT-4.",
+    "results/trials.jsonl retains prompts, labels and all responses."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "Scheduled experiment.py",
+    "results/trials.jsonl"
+   ]
+  },
+  "measurement_uncertainty": {
+   "id": "measurement_uncertainty",
+   "parent": "first_run_complete",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "Strict format compliance conflates answer quality with instruction following.",
+   "key_evidence": [
+    "GPT-3.5 Turbo CSQA has 72/100 strict missing-FINAL flags, often an inline FINAL marker."
+   ],
+   "lessons": [
+    "Retain preregistered strict score; add clearly labelled post-hoc gold-blind answer-extraction sensitivity analysis."
+   ],
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "extend_gpt4": {
+   "id": "extend_gpt4",
+   "parent": "budget_estimate",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Increase GPT-4 paired sample using the unchanged protocol.",
+   "key_evidence": [
+    "Initial total key usage $1.609602; enough credit remains for additional GPT-4 trials.",
+    "Continue predetermined sample ranks 6 through 24, to 300 total GPT-4 calls maximum; keep conservative $3.65 stop."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Do not alter prompts after observing outcomes; report extraction sensitivity separately."
+   ],
+   "tools_called": [
+    "Budget endpoint",
+    "Existing sample manifest"
+   ]
+  },
+  "trial_gpt-4_extension_gsm8k_6": {
+   "id": "trial_gpt-4_extension_gsm8k_6",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "EXPERIMENT",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=trial_gpt-4_extension_gsm8k_6",
+   "current_hypothesis": "Run paired four-call trial.",
+   "key_evidence": [
+    "gsm8k index 1131; model openai/gpt-4; temperature 1; gold withheld."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference.generate"
+   ]
+  },
+  "trial_gpt-4_extension_gsm8k_6_baseline": {
+   "id": "trial_gpt-4_extension_gsm8k_6_baseline",
+   "parent": "trial_gpt-4_extension_gsm8k_6",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_extension_gsm8k_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='$96.'; gold='96'; EM=False",
+    "Full response in results/calls.jsonl; input=100, output=69"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_extension_commonsenseqa_6_baseline": {
+   "id": "trial_gpt-4_extension_commonsenseqa_6_baseline",
+   "parent": "trial_gpt-4_extension_gsm8k_6",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_extension_commonsenseqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C'; gold='D'; EM=False",
+    "Full response in results/calls.jsonl; input=78, output=45"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_extension_hotpotqa_6_baseline": {
+   "id": "trial_gpt-4_extension_hotpotqa_6_baseline",
+   "parent": "trial_gpt-4_extension_gsm8k_6",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_extension_hotpotqa_6_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='Ricky Rubio.'; gold='Ricard Rubio i Vives'; EM=False",
+    "Full response in results/calls.jsonl; input=1796, output=41"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_extension_gsm8k_7_baseline": {
+   "id": "trial_gpt-4_extension_gsm8k_7_baseline",
+   "parent": "trial_gpt-4_extension_gsm8k_6",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_extension_gsm8k_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='5760 coins.'; gold='5760'; EM=False",
+    "Full response in results/calls.jsonl; input=88, output=92"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "trial_gpt-4_extension_commonsenseqa_7_baseline": {
+   "id": "trial_gpt-4_extension_commonsenseqa_7_baseline",
+   "parent": "trial_gpt-4_extension_gsm8k_6",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-4_extension_commonsenseqa_7_baseline",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": [
+    "answer='C. great britain'; gold='C'; EM=False",
+    "Full response in results/calls.jsonl; input=73, output=51"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter openai/gpt-4",
+    "Strict FINAL extraction and domain normalization"
+   ]
+  },
+  "budget_stop_gpt-4_extension": {
+   "id": "budget_stop_gpt-4_extension",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Reserve credit for final analysis.",
+   "key_evidence": [
+    "{\"usage\": 3.049812, \"limit\": 5, \"limit_remaining\": 1.9501879999999998}",
+    "Conservative next-item cost 0.6910200000000001"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "extraction_rule": {
+   "id": "extraction_rule",
+   "parent": "measurement_uncertainty",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Measure answer-content EM separately from strict-format EM.",
+   "key_evidence": [
+    "Post-hoc, gold-blind: use last FINAL marker anywhere; GSM8K last numeric token; CSQA first standalone uppercase A-E; Hotpot final text with standard normalization.",
+    "No semantic grader, gold-dependent matching, or changes to model calls.",
+    "Fixtures passed for inline markers, numeric punctuation, literal format descriptors."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Post-hoc extraction may still misread ambiguous multi-number or multi-option final strings."
+   ],
+   "tools_called": [
+    "analyze.py"
+   ]
+  },
+  "result_gpt-3.5-turbo_gsm8k": {
+   "id": "result_gpt-3.5-turbo_gsm8k",
+   "parent": "extraction_rule",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 10 个同父同类节点，代表节点 id=result_gpt-3.5-turbo_gsm8k",
+   "current_hypothesis": "Estimate two-round correction effect for this model/domain.",
+   "key_evidence": [
+    "{\"model\": \"openai/gpt-3.5-turbo\", \"dataset\": \"gsm8k\", \"scoring\": \"answer_extracted\", \"n\": 25, \"baseline\": 18, \"correction1\": 22, \"correction2\": 19, \"resample\": 14, \"r1_repairs\": 4, \"r1_regressions\": 0, \"r1_delta_pp\": 16.0, \"r1_p\": 0.125, \"r1_ci_low\": 4.0, \"r1_ci_high\": 32.0, \"r2_repairs\": 3, \"r2_regressions\": 2, \"r2_delta_pp\": 4.0, \"r2_p\": 1, \"r2_ci_low\": -12.0, \"r2_ci_high\": 20.0}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Small paired sample; exploratory unadjusted p-values and bootstrap intervals."
+   ],
+   "tools_called": [
+    "analyze.py",
+    "results/scored_answers.jsonl"
+   ]
+  },
+  "aggregate_audit": {
+   "id": "aggregate_audit",
+   "parent": "first_run_complete",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Audit completed trials, billing and output integrity.",
+   "key_evidence": [
+    "{\"trial_count\": 173, \"call_count\": 692, \"counts_by_model\": {\"openai/gpt-3.5-turbo\": 75, \"openai/gpt-3.5-turbo-0613\": 75, \"openai/gpt-4\": 23}, \"experimental_cost_usd\": 2.4511050000000014, \"strict_missing_final\": 118, \"token_limit_hits\": 0, \"common_per_domain\": {\"gsm8k\": 8, \"commonsenseqa\": 8, \"hotpotqa\": 7}}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "api_usage.jsonl",
+    "results/trials.jsonl"
+   ]
+  },
+  "gpu_correction": {
+   "id": "gpu_correction",
+   "parent": "budget0",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Clarify GPU preflight evidence.",
+   "key_evidence": [
+    "API-only mode skipped all CUDA queries; empty devices list is not a memory measurement.",
+    "140 GB FP16 estimate is theoretical; no local weights loaded."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/preflight.json"
+   ]
+  },
+  "synthesis": {
+   "id": "synthesis",
+   "parent": "root",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=synthesis",
+   "current_hypothesis": "Two rounds show mixed, small observed effects rather than consistent improvement.",
+   "key_evidence": [
+    "173 trials; 692 calls; math early gains can regress in round 2; commonsense can degrade; small GPT-4 effects uncertain.",
+    "All exact paired p-values >= .125; no evidence of equivalence.",
+    "Strict output-format confound requires reporting both scoring pipelines."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Partial model coverage, small samples, post-hoc extraction."
+   ],
+   "tools_called": [
+    "results/summary.csv",
+    "final_answer.md"
+   ]
+  },
+  "extension_complete": {
+   "id": "extension_complete",
+   "parent": "extend_gpt4",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Complete additional budget-limited GPT-4 trials.",
+   "key_evidence": [
+    "Job 1500596 exit 0; 5 additional complete trials, 20 calls; final GPT-4 total 23 trials and 92 calls.",
+    "Final domain counts 8 GSM8K, 8 CommonSenseQA, 7 HotpotQA."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/trials.jsonl",
+    "Tracked job wait"
+   ]
+  },
+  "final_budget": {
+   "id": "final_budget",
+   "parent": "synthesis",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Record final observed task credit usage.",
+   "key_evidence": [
+    "results/budget_final_snapshot.json: usage $4.223872; remaining $0.776128.",
+    "Usage includes research-agent calls and experiment calls; future final-response accounting may increase this."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "tools/budget_status.py"
+   ]
+  },
+  "resources__hyp": {
+   "id": "resources__hyp",
+   "parent": "root",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 10 个同父同类节点，代表节点 id=resources__hyp",
+   "current_hypothesis": "Which requested models and data can be accessed within the assigned resources?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "budget0__hyp": {
+   "id": "budget0__hyp",
+   "parent": "resources",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=budget0__hyp",
+   "current_hypothesis": "Establish starting credit.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "budget_estimate__hyp": {
+   "id": "budget_estimate__hyp",
+   "parent": "design",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=budget_estimate__hyp",
+   "current_hypothesis": "Fit serial trials while retaining analysis credit.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "job_1500539__hyp": {
+   "id": "job_1500539__hyp",
+   "parent": "budget_estimate",
+   "node_type": "HYPOTHESIS",
+   "status": "pruned",
+   "current_hypothesis": "Retry tracked scheduled experiment.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "trial_gpt-3.5-turbo_gsm8k_0__hyp": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_0__hyp",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Run paired four-call trial.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "trial_gpt-3.5-turbo_gsm8k_0_baseline__hyp": {
+   "id": "trial_gpt-3.5-turbo_gsm8k_0_baseline__hyp",
+   "parent": "trial_gpt-3.5-turbo_gsm8k_0",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=trial_gpt-3.5-turbo_gsm8k_0_baseline__hyp",
+   "current_hypothesis": "Measure baseline exact match.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "measurement_uncertainty__hyp": {
+   "id": "measurement_uncertainty__hyp",
+   "parent": "first_run_complete",
+   "node_type": "HYPOTHESIS",
+   "status": "needs_review · 合并了 2 个同父同类节点，代表节点 id=measurement_uncertainty__hyp",
+   "current_hypothesis": "Strict format compliance conflates answer quality with instruction following.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "extend_gpt4__hyp": {
+   "id": "extend_gpt4__hyp",
+   "parent": "budget_estimate",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Increase GPT-4 paired sample using the unchanged protocol.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "budget_stop_gpt-4_extension__hyp": {
+   "id": "budget_stop_gpt-4_extension__hyp",
+   "parent": "run_gpt-3.5-turbo",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Reserve credit for final analysis.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "extraction_rule__hyp": {
+   "id": "extraction_rule__hyp",
+   "parent": "measurement_uncertainty",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Measure answer-content EM separately from strict-format EM.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "result_gpt-3.5-turbo_gsm8k__hyp": {
+   "id": "result_gpt-3.5-turbo_gsm8k__hyp",
+   "parent": "extraction_rule",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=result_gpt-3.5-turbo_gsm8k__hyp",
+   "current_hypothesis": "Estimate two-round correction effect for this model/domain.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "gpu_correction__hyp": {
+   "id": "gpu_correction__hyp",
+   "parent": "budget0",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Clarify GPU preflight evidence.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "extension_complete__hyp": {
+   "id": "extension_complete__hyp",
+   "parent": "extend_gpt4",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Complete additional budget-limited GPT-4 trials.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "final_budget__hyp": {
+   "id": "final_budget__hyp",
+   "parent": "synthesis",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Record final observed task credit usage.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

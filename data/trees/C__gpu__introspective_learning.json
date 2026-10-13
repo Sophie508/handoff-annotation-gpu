@@ -1,0 +1,257 @@
+{
+ "tree_id": "C/gpu/introspective_learning",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "introspective_learning",
+ "question": "A model may predict its own held-out behavior better than another model given identical behavioral training examples.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "n000": {
+   "id": "n000",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "needs_review",
+   "current_hypothesis": "A model may predict its own held-out behavior better than another model given identical behavioral training examples.",
+   "key_evidence": [
+    "Task requires real experiments across specified training and evaluation domains.",
+    "Operational budget is $5 including agent usage; one scheduled GPU job at a time."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Full training and four-model scale may exceed resources.",
+    "Prediction advantage alone does not establish knowledge independent of pretraining."
+   ],
+   "tools_called": [
+    "task instruction",
+    "workspace discovery with rg"
+   ]
+  },
+  "n010": {
+   "id": "n010",
+   "parent": "n000",
+   "node_type": "EXPERIMENT",
+   "status": "pruned · 合并了 2 个同父同类节点，代表节点 id=n010",
+   "current_hypothesis": "Scheduled preparation can run on the provided template.",
+   "key_evidence": [
+    "Job 1500518 exited before experiment.py: CUDA_VISIBLE_DEVICES: No GPUs were assigned by UGE.",
+    "No datasets, inference, or model probes executed."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster submit/wait",
+    "own job stdout"
+   ]
+  },
+  "n012": {
+   "id": "n012",
+   "parent": "n000",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=n012",
+   "current_hypothesis": "Can the exact requested datasets and models be accessed?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n029": {
+   "id": "n029",
+   "parent": "n012",
+   "node_type": "PLAN",
+   "status": "complete · 合并了 14 个同父同类节点，代表节点 id=n029",
+   "current_hypothesis": "Cross both models as targets and predictors and include zero-shot controls.",
+   "key_evidence": [
+    "Two models; 6 training examples and 36 evaluation prompts per model; 12 behavior repeats per model.",
+    "Both predictors receive byte-identical target prompts."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "plan.md"
+   ]
+  },
+  "n043": {
+   "id": "n043",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 156 个同父同类节点，代表节点 id=n043",
+   "current_hypothesis": "behavior openai/gpt-4",
+   "key_evidence": [
+    "{\"item\": \"train_0_0\"}",
+    "Response recorded in results/calls.jsonl at line 1"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter serial inference"
+   ]
+  },
+  "n199": {
+   "id": "n199",
+   "parent": "n000",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Initial equal-example comparison does not show self advantage.",
+   "key_evidence": [
+    "Few-shot GPT-4 target: self 16/36, other 16/36.",
+    "Few-shot GPT-4o target: self 15/36, other 16/36.",
+    "156 successful API calls; experimental cost $0.96758."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Pilot underpowered."
+   ],
+   "tools_called": [
+    "results/predictions.json",
+    "results/execution.json"
+   ]
+  },
+  "n200": {
+   "id": "n200",
+   "parent": "n199",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "Temperature zero does not guarantee stable or valid behavioral labels.",
+   "key_evidence": [
+    "Two GPT-4 survival responses truncated at 8 tokens without a choice.",
+    "Repeat observations differ for some prompts."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/calls.jsonl",
+    "results/repeats.json"
+   ]
+  },
+  "n203": {
+   "id": "n203",
+   "parent": "n012",
+   "node_type": "PLAN",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=n203",
+   "current_hypothesis": "Cross both models as targets and predictors and include zero-shot controls.",
+   "key_evidence": [
+    "Two models; six original training examples; 36 additional evaluation prompts per model; no extension repeats.",
+    "Both predictors receive byte-identical target prompts."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "plan.md"
+   ]
+  },
+  "n211": {
+   "id": "n211",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 120 个同父同类节点，代表节点 id=n211",
+   "current_hypothesis": "behavior openai/gpt-4",
+   "key_evidence": [
+    "{\"item\": \"extension_test_0_0\"}",
+    "Response recorded in results/calls.jsonl at line 1"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "OpenRouter serial inference"
+   ]
+  },
+  "n332": {
+   "id": "n332",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=n332",
+   "current_hypothesis": "matrix",
+   "key_evidence": [
+    "[{\"context\": \"few\", \"target\": \"openai/gpt-4\", \"predictor\": \"openai/gpt-4\", \"n\": 72, \"correct\": 35, \"accuracy\": 0.4861111111111111, \"invalid_predictions\": 0, \"invalid_targets\": 2}, {\"context\": \"few\", \"target\": \"openai/gpt-4\", \"predictor\": \"openai/gpt-4o\", \"n\": 72, \"correct\": 32, \"accuracy\": 0.4444444444444444, \"invalid_predictions\": 0, \"invalid_targets\": 2}, {\"context\": \"few\", \"target\": \"openai/gpt-4o\", \"predictor\": \"openai/gpt-4\", \"n\": 72, \"correct\": 37, \"accuracy\": 0.5138888888888888, \"invalid_predictions\": 0, \"invalid_targets\": 1}, {\"context\": \"few\", \"target\": \"openai/gpt-4o\", \"predictor\": \"openai/gpt-4o\", \"n\": 72, \"correct\": 33, \"accuracy\": 0.4583333333333333, \"invalid_predictions\": 0, \"invalid_targets\": 1}, {\"context\": \"zero\", \"target\": \"openai/gpt-4\", \"predictor\": \"openai/gpt-4\", \"n\": 72, \"correct\": 35, \"accuracy\": 0.4861111111111111, \"invalid_predictions\": 0, \"invalid_targets\": 2}, {\"context\": \"zero\", \"target\": \"openai/gpt-4\", \"predictor\": \"openai/gpt-4o\", \"n\": 72, \"correct\": 31, \"accuracy\": 0.4305555555555556, \"invalid_predictions\": 0, \"invalid_targets\": 2}, {\"context\": \"zero\", \"target\": \"openai/gpt-4o\", \"predictor\": \"openai/gpt-4\", \"n\": 72, \"correct\": 35, \"accuracy\": 0.4861111111111111, \"invalid_predictions\": 0, \"invalid_targets\": 1}, {\"context\": \"zero\", \"target\": \"openai/gpt-4o\", \"predictor\": \"openai/gpt-4o\", \"n\": 72, \"correct\": 35, \"accuracy\": 0.4861111111111111, \"invalid_predictions\": 0, \"invalid_targets\": 1}]"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "results/calls.jsonl",
+    "results_extension/calls.jsonl",
+    "analyze.py"
+   ]
+  },
+  "n340": {
+   "id": "n340",
+   "parent": "n012",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "This pilot cannot establish introspective knowledge independent of training data.",
+   "key_evidence": [
+    "No weight updates performed; only equal in-context examples.",
+    "Original Llama base comparisons unavailable; all measured results are GPT API behavior.",
+    "Self prediction can share priors or simulate answers without privileged introspection."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n341": {
+   "id": "n341",
+   "parent": "n000",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n341",
+   "current_hypothesis": "Final conclusion is partial and does not establish introspection.",
+   "key_evidence": [
+    "Pooled six-example self 68/144 versus other 69/144; difference -0.7 pp, exploratory CI [-6.9,+5.6] pp.",
+    "276 successful experimental calls costing $1.8560925.",
+    "final_answer.md provides concise conclusion, settings, domain results, validity checks, limitations and remaining work."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "No equally fine-tuned comparison; no exact Llama experiments; knowledge provenance untested."
+   ],
+   "tools_called": [
+    "analysis.json",
+    "final_answer.md",
+    "completion.json"
+   ]
+  },
+  "n010__hyp": {
+   "id": "n010__hyp",
+   "parent": "n000",
+   "node_type": "HYPOTHESIS",
+   "status": "pruned · 合并了 8 个同父同类节点，代表节点 id=n010__hyp",
+   "current_hypothesis": "Scheduled preparation can run on the provided template.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n029__hyp": {
+   "id": "n029__hyp",
+   "parent": "n012",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 20 个同父同类节点，代表节点 id=n029__hyp",
+   "current_hypothesis": "Cross both models as targets and predictors and include zero-shot controls.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n200__hyp": {
+   "id": "n200__hyp",
+   "parent": "n199",
+   "node_type": "HYPOTHESIS",
+   "status": "needs_review",
+   "current_hypothesis": "Temperature zero does not guarantee stable or valid behavioral labels.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n332__hyp": {
+   "id": "n332__hyp",
+   "parent": "n012",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 9 个同父同类节点，代表节点 id=n332__hyp",
+   "current_hypothesis": "matrix",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

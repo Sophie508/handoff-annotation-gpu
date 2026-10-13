@@ -1,0 +1,100 @@
+{
+ "built_from": {
+  "gallery": "/Users/sophie/Desktop/Auto Research trajectory/trees_7type_gallery.html",
+  "raw_zip": "zhmzm/handoff_bench tree_construction_files/gpu_traj/collected_2026_10_05/collected_traj.zip @ 7728e380",
+  "merge_rule": "same-parent + same-type siblings collapsed to 1 representative node (uniform across all 7 types, not yet confirmed with collaborator)"
+ },
+ "labelers": {
+  "C": {}
+ },
+ "datasets": {
+  "C": {
+   "name": "GPU trajectories (merged 7-type, 10 tasks)",
+   "labelers_comparable": false,
+   "note": "no luna/sonnet machine labels exist yet for this dataset — human_label only; luna_label/sonnet_label columns in the export will be blank until machine labeling is added",
+   "measure_keys": []
+  }
+ },
+ "trees": [
+  {
+   "tree_id": "C/gpu/activation_control",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "activation_control",
+   "question": "Activation interventions can increase generated reasoning length with useful accuracy gains beyond prompting alone.",
+   "n_nodes": 10
+  },
+  {
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "cot_faithfulness_gaps",
+   "question": "External hints may causally change answers without being acknowledged in emitted reasoning.",
+   "n_nodes": 48
+  },
+  {
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "counterfactual_simulatability",
+   "question": "Do natural-language explanations improve counterfactual simulation of model behavior?",
+   "n_nodes": 25
+  },
+  {
+   "tree_id": "C/gpu/fallback_behaviors",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "fallback_behaviors",
+   "question": "Models may express uncertainty through abstention, hedging, clarification, unsupported answers, or task drift.",
+   "n_nodes": 20
+  },
+  {
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "fractal_complexity_of_language",
+   "question": "Temperature, prompting, and model identity may alter the temporal scaling of token surprisal relative to paired human text.",
+   "n_nodes": 46
+  },
+  {
+   "tree_id": "C/gpu/introspective_learning",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "introspective_learning",
+   "question": "A model may predict its own held-out behavior better than another model given identical behavioral training examples.",
+   "n_nodes": 16
+  },
+  {
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "llm_confidence_elicitation",
+   "question": "Black-box confidence quality depends on elicitation, aggregation, model, and dataset; controlled experiments can distinguish calibration from failure ranking.",
+   "n_nodes": 63
+  },
+  {
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "llms_lack_self_correction",
+   "question": "Measure the effect of two rounds of intrinsic self-correction on exact match across three reasoning domains.",
+   "n_nodes": 210
+  },
+  {
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "lost_in_the_middle",
+   "question": "Normalized exact-match QA accuracy depends on the position of the sole gold passage within 20 documents.",
+   "n_nodes": 29
+  },
+  {
+   "tree_id": "C/gpu/premise_order_effects",
+   "dataset": "C",
+   "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+   "task": "premise_order_effects",
+   "question": "Logically identical premise permutations may change LLM accuracy.",
+   "n_nodes": 51
+  }
+ ]
+}

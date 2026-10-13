@@ -1,0 +1,889 @@
+{
+ "tree_id": "C/gpu/llm_confidence_elicitation",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "llm_confidence_elicitation",
+ "question": "Black-box confidence quality depends on elicitation, aggregation, model, and dataset; controlled experiments can distinguish calibration from failure ranking.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "n000": {
+   "id": "n000",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "needs_review",
+   "current_hypothesis": "Black-box confidence quality depends on elicitation, aggregation, model, and dataset; controlled experiments can distinguish calibration from failure ranking.",
+   "key_evidence": [
+    "Task requires real scheduled experiments with four specified model families and a capped lifetime budget."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Legacy model availability and credit may limit comparisons."
+   ],
+   "tools_called": [
+    "workspace file discovery"
+   ]
+  },
+  "n009": {
+   "id": "n009",
+   "parent": "n000",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=n009",
+   "current_hypothesis": "New dataset selection is required.",
+   "key_evidence": [
+    "task_assets.json is []",
+    "fetch_data helper reported no downloadable assets"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n011": {
+   "id": "n011",
+   "parent": "n000",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n011",
+   "current_hypothesis": "Do direct and reasoning-assisted verbal confidence predict answer correctness?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Prompting changes answers as well as confidence."
+   ],
+   "tools_called": ""
+  },
+  "n013": {
+   "id": "n013",
+   "parent": "n000",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "A 560-call GPT-3.5 pilot should fit while preserving write-up credit.",
+   "key_evidence": [
+    "Initial reported usage $0; GPT-3.5 price $0.50/M prompt tokens and $1.50/M output tokens.",
+    "80 items x (2 deterministic prompts + 5 stochastic reasoning prompts) = 560 calls; <=1000/model.",
+    "At 400 input and 160 output tokens/call estimated model spend $0.2464."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Research-agent spend and longer prompts add cost."
+   ],
+   "tools_called": ""
+  },
+  "n015": {
+   "id": "n015",
+   "parent": "n013",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "A nested GPT-4 subset can fit the capped budget with three samples.",
+   "key_evidence": [
+    "Revised plan: 80 GPT-3.5 items x 5 calls = 400; 24 GPT-4 items x 5 calls = 120.",
+    "Hard experimental spend cap $2.40; total reported-usage cap $3.50."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Per-call preflight estimates and delayed provider usage may not exactly predict spend."
+   ],
+   "tools_called": ""
+  },
+  "n016": {
+   "id": "n016",
+   "parent": "n011",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Paired prompt comparisons and fixed-answer agreement separate answer changes from confidence changes.",
+   "key_evidence": [
+    "plan.md specifies dataset selection, model subsets, parsing, metrics, bootstrap, and stopping rules before inference."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Three-sample agreement is coarse; GPT-4 domain subsets have n=12."
+   ],
+   "tools_called": ""
+  },
+  "n017": {
+   "id": "n017",
+   "parent": "n000",
+   "node_type": "EXPERIMENT",
+   "status": "pruned · 合并了 21 个同父同类节点，代表节点 id=n017",
+   "current_hypothesis": "The first registered job failed before experiment startup.",
+   "key_evidence": [
+    "Job 1500525",
+    "Own job log: template line 13: CUDA_VISIBLE_DEVICES: No GPUs were assigned by UGE",
+    "No experiment files or inference results were produced."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py submit/wait/status",
+    "read own job stdout"
+   ]
+  },
+  "n037": {
+   "id": "n037",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 direct inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n038": {
+   "id": "n038",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 reason inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n039": {
+   "id": "n039",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_0 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n040": {
+   "id": "n040",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_1 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=1",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n041": {
+   "id": "n041",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_2 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n049": {
+   "id": "n049",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo direct inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=80",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n050": {
+   "id": "n050",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo reason inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=80",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n051": {
+   "id": "n051",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_0 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=80",
+    "parse_failures=1",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n052": {
+   "id": "n052",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_1 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=80",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n053": {
+   "id": "n053",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_2 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=80",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n054": {
+   "id": "n054",
+   "parent": "n016",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=n054",
+   "current_hypothesis": "Compute calibration and failure-ranking metrics without fitted recalibration.",
+   "key_evidence": [
+    "results/metrics.csv",
+    "results/paired_bootstrap.json",
+    "results/common_subset_metrics.json",
+    "{\"successful_calls\": 520, \"failed_calls\": 0, \"parse_failures\": 2, \"logged_api_cost\": 0.8232939999999987, \"models\": {\"openai/gpt-3.5-turbo\": {\"items_attempted\": 80, \"all_five_valid\": 79, \"successful_calls\": 400}, \"openai/gpt-4\": {\"items_attempted\": 24, \"all_five_valid\": 23, \"successful_calls\": 120}}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Few failures can make AUROC undefined or unstable; coarse agreement probabilities cause extreme NLL."
+   ],
+   "tools_called": [
+    "analyze.py",
+    "NumPy; 2000 paired bootstrap resamples"
+   ]
+  },
+  "n055": {
+   "id": "n055",
+   "parent": "n054",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=n055",
+   "current_hypothesis": "Measured strategy results on openai/gpt-3.5-turbo, arc.",
+   "key_evidence": [
+    "{\"strategy\": \"direct\", \"n\": 40, \"failures\": 7, \"accuracy\": 0.825, \"brier\": 0.0964375, \"ece5\": 0.05374999999999995, \"auroc\": 0.8463203463203464, \"risk_at_50\": 0.05}",
+    "{\"strategy\": \"direct_agreement\", \"n\": 39, \"failures\": 6, \"accuracy\": 0.8461538461538461, \"brier\": 0.05982905982905983, \"ece5\": 0.07692307692307693, \"auroc\": 0.9671717171717171, \"risk_at_50\": 0.0}",
+    "{\"strategy\": \"majority_verbal\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.09140669515669515, \"ece5\": 0.01965811965811981, \"auroc\": 0.5642857142857143, \"risk_at_50\": 0.15384615384615385}",
+    "{\"strategy\": \"majority_vote\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.07692307692307693, \"ece5\": 0.0769230769230769, \"auroc\": 0.8214285714285714, \"risk_at_50\": 0.030303030303030304}",
+    "{\"strategy\": \"majority_weighted\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.07606034532659549, \"ece5\": 0.07720419396761921, \"auroc\": 0.8428571428571429, \"risk_at_50\": 0.030303030303030304}",
+    "{\"strategy\": \"reason\", \"n\": 40, \"failures\": 6, \"accuracy\": 0.85, \"brier\": 0.12262500000000001, \"ece5\": 0.06999999999999995, \"auroc\": 0.7598039215686274, \"risk_at_50\": 0.05}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n061": {
+   "id": "n061",
+   "parent": "n054",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n061",
+   "current_hypothesis": "One inspected salary question has a potentially ambiguous bonus reference.",
+   "key_evidence": [
+    "gsm8k_641 gold 262500 uses half the raised salary; model 262000 uses half the original salary."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n063": {
+   "id": "n063",
+   "parent": "n009",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "GPT-4 catalog correction is now experimentally verified.",
+   "key_evidence": [
+    "120 successful calls to exact openai/gpt-4; no model substituted."
+   ],
+   "lessons": [
+    "The original absence assertion was false; its correction is resolved."
+   ],
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n071": {
+   "id": "n071",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 direct inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n072": {
+   "id": "n072",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 reason inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n073": {
+   "id": "n073",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_0 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n074": {
+   "id": "n074",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_1 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n075": {
+   "id": "n075",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_2 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=0",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n077": {
+   "id": "n077",
+   "parent": "n054",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=n077",
+   "current_hypothesis": "Measured strategy results on openai/gpt-3.5-turbo, arc.",
+   "key_evidence": [
+    "{\"strategy\": \"direct\", \"n\": 40, \"failures\": 7, \"accuracy\": 0.825, \"brier\": 0.0964375, \"ece5\": 0.05374999999999995, \"auroc\": 0.8463203463203464, \"risk_at_50\": 0.05}",
+    "{\"strategy\": \"direct_agreement\", \"n\": 39, \"failures\": 6, \"accuracy\": 0.8461538461538461, \"brier\": 0.05982905982905983, \"ece5\": 0.07692307692307693, \"auroc\": 0.9671717171717171, \"risk_at_50\": 0.0}",
+    "{\"strategy\": \"majority_verbal\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.09140669515669515, \"ece5\": 0.01965811965811981, \"auroc\": 0.5642857142857143, \"risk_at_50\": 0.15384615384615385}",
+    "{\"strategy\": \"majority_vote\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.07692307692307693, \"ece5\": 0.0769230769230769, \"auroc\": 0.8214285714285714, \"risk_at_50\": 0.030303030303030304}",
+    "{\"strategy\": \"majority_weighted\", \"n\": 39, \"failures\": 4, \"accuracy\": 0.8974358974358975, \"brier\": 0.07606034532659549, \"ece5\": 0.07720419396761921, \"auroc\": 0.8428571428571429, \"risk_at_50\": 0.030303030303030304}",
+    "{\"strategy\": \"reason\", \"n\": 40, \"failures\": 6, \"accuracy\": 0.85, \"brier\": 0.12262500000000001, \"ece5\": 0.06999999999999995, \"auroc\": 0.7598039215686274, \"risk_at_50\": 0.05}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n084": {
+   "id": "n084",
+   "parent": "n054",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=n084",
+   "current_hypothesis": "Verbal confidence is dataset-dependent and seriously overconfident on this GSM8K subset.",
+   "key_evidence": [
+    "GPT-3.5 GSM8K direct accuracy .350 vs mean confidence .9975; Brier .647625.",
+    "GPT-4 GSM8K direct accuracy .625 vs mean confidence .997917; Brier .370938.",
+    "ARC direct Brier .096438 and .038958, respectively."
+   ],
+   "lessons": [
+    "A favorable calibration result on one domain does not transfer automatically to another."
+   ],
+   "main_risk": [
+    "Prompt format and terse reasoning constraints affect these results."
+   ],
+   "tools_called": ""
+  },
+  "n085": {
+   "id": "n085",
+   "parent": "n011",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n085",
+   "current_hypothesis": "Fixed-answer agreement improves GSM8K calibration and ranking on both models, but is not a universal improvement.",
+   "key_evidence": [
+    "GPT-3.5 GSM8K paired Brier difference -.52818, bootstrap 95% CI [-.69763,-.35595].",
+    "GPT-4 GSM8K paired Brier difference -.35242, CI [-.56538,-.16667].",
+    "GPT-4 ARC paired difference +.02226, CI [-.00120,.06281], and AUROC .4773 with just one direct-answer failure."
+   ],
+   "lessons": [
+    "Repeated samples can agree on the same wrong answer."
+   ],
+   "main_risk": [
+    "Agreement uses different reasoning prompts from direct generation, mixing prompt and sampling effects; three samples only."
+   ],
+   "tools_called": ""
+  },
+  "n089": {
+   "id": "n089",
+   "parent": "n061",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Primary pooled agreement improvements survive both post-hoc scoring sensitivities.",
+   "key_evidence": [
+    "Permissive parsing Brier: GPT-3.5 direct .37203 vs agreement .09444; GPT-4 direct .20495 vs agreement .04861.",
+    "Exclude ambiguous salary item under strict scoring: .36408 vs .08974 and .18803 vs .03865."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Sensitivity checks were selected after inspecting two response-format failures and one ambiguous item; no comprehensive label audit."
+   ],
+   "tools_called": ""
+  },
+  "n092": {
+   "id": "n092",
+   "parent": "n000",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n092",
+   "current_hypothesis": "The full four-model research task remains partial.",
+   "key_evidence": [
+    "Exact meta-llama/Llama-2-13b-chat-hf config request returned HTTP 401.",
+    "Exact lmsys/vicuna-13b config request returned HTTP 401.",
+    "Scheduler did not expose CUDA_VISIBLE_DEVICES, preventing safe local inference independently of model access."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "HTTP 401 alone does not prove a repository is absent."
+   ],
+   "tools_called": ""
+  },
+  "n093": {
+   "id": "n093",
+   "parent": "n054",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Check metric behavior on small examples with known exact results.",
+   "key_evidence": [
+    "Perfect predictions: Brier 0, AUROC 1.",
+    "Constant .5 predictions: Brier .25, AUROC .5, tie-aware risk .5.",
+    "Reversed predictions: Brier 1, AUROC 0."
+   ],
+   "lessons": [
+    "Basic probability, ranking, and tie-handling calculations passed."
+   ],
+   "main_risk": "",
+   "tools_called": [
+    "metrics function assertions"
+   ]
+  },
+  "n151": {
+   "id": "n151",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf direct inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=11",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n152": {
+   "id": "n152",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf reason inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=9",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n153": {
+   "id": "n153",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_0 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=11",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n154": {
+   "id": "n154",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_1 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=9",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n155": {
+   "id": "n155",
+   "parent": "n017",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_2 inference coverage measured.",
+   "key_evidence": [
+    "successful_calls=24",
+    "parse_failures=7",
+    "stop=None"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n157": {
+   "id": "n157",
+   "parent": "n054",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 6 个同父同类节点，代表节点 id=n157",
+   "current_hypothesis": "Measured strategy results on meta-llama/Llama-2-13b-chat-hf, arc.",
+   "key_evidence": [
+    "{\"strategy\": \"direct\", \"n\": 1, \"failures\": 0, \"accuracy\": 1.0, \"brier\": 0.0, \"ece5\": 0.0, \"auroc\": null, \"risk_at_50\": 0.0}",
+    "{\"strategy\": \"direct_agreement\", \"n\": 1, \"failures\": 0, \"accuracy\": 1.0, \"brier\": 0.0, \"ece5\": 0.0, \"auroc\": null, \"risk_at_50\": 0.0}",
+    "{\"strategy\": \"majority_verbal\", \"n\": 2, \"failures\": 1, \"accuracy\": 0.5, \"brier\": 0.3805555555555556, \"ece5\": 0.3833333333333333, \"auroc\": 1.0, \"risk_at_50\": 0.0}",
+    "{\"strategy\": \"majority_vote\", \"n\": 2, \"failures\": 1, \"accuracy\": 0.5, \"brier\": 0.5, \"ece5\": 0.5, \"auroc\": 0.5, \"risk_at_50\": 0.5}",
+    "{\"strategy\": \"majority_weighted\", \"n\": 2, \"failures\": 1, \"accuracy\": 0.5, \"brier\": 0.5, \"ece5\": 0.5, \"auroc\": 0.5, \"risk_at_50\": 0.5}",
+    "{\"strategy\": \"reason\", \"n\": 4, \"failures\": 2, \"accuracy\": 0.5, \"brier\": 0.42250000000000004, \"ece5\": 0.375, \"auroc\": 0.375, \"risk_at_50\": 0.5}"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n009__hyp": {
+   "id": "n009__hyp",
+   "parent": "n000",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 26 个同父同类节点，代表节点 id=n009__hyp",
+   "current_hypothesis": "New dataset selection is required.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n015__hyp": {
+   "id": "n015__hyp",
+   "parent": "n013",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "A nested GPT-4 subset can fit the capped budget with three samples.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n016__hyp": {
+   "id": "n016__hyp",
+   "parent": "n011",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Paired prompt comparisons and fixed-answer agreement separate answer changes from confidence changes.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n037__hyp": {
+   "id": "n037__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 direct inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n038__hyp": {
+   "id": "n038__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 reason inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n039__hyp": {
+   "id": "n039__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_0 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n040__hyp": {
+   "id": "n040__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_1 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n041__hyp": {
+   "id": "n041__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-4 sample_2 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n049__hyp": {
+   "id": "n049__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo direct inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n050__hyp": {
+   "id": "n050__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo reason inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n051__hyp": {
+   "id": "n051__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_0 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n052__hyp": {
+   "id": "n052__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_1 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n053__hyp": {
+   "id": "n053__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "openai/gpt-3.5-turbo sample_2 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n054__hyp": {
+   "id": "n054__hyp",
+   "parent": "n016",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Compute calibration and failure-ranking metrics without fitted recalibration.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n055__hyp": {
+   "id": "n055__hyp",
+   "parent": "n054",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 7 个同父同类节点，代表节点 id=n055__hyp",
+   "current_hypothesis": "Measured strategy results on openai/gpt-3.5-turbo, arc.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n063__hyp": {
+   "id": "n063__hyp",
+   "parent": "n009",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "GPT-4 catalog correction is now experimentally verified.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n084__hyp": {
+   "id": "n084__hyp",
+   "parent": "n054",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 4 个同父同类节点，代表节点 id=n084__hyp",
+   "current_hypothesis": "Verbal confidence is dataset-dependent and seriously overconfident on this GSM8K subset.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n085__hyp": {
+   "id": "n085__hyp",
+   "parent": "n011",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n085__hyp",
+   "current_hypothesis": "Fixed-answer agreement improves GSM8K calibration and ranking on both models, but is not a universal improvement.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n089__hyp": {
+   "id": "n089__hyp",
+   "parent": "n061",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Primary pooled agreement improvements survive both post-hoc scoring sensitivities.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n151__hyp": {
+   "id": "n151__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf direct inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n152__hyp": {
+   "id": "n152__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf reason inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n153__hyp": {
+   "id": "n153__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_0 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n154__hyp": {
+   "id": "n154__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_1 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n155__hyp": {
+   "id": "n155__hyp",
+   "parent": "n017",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "meta-llama/Llama-2-13b-chat-hf sample_2 inference coverage measured.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n157__hyp": {
+   "id": "n157__hyp",
+   "parent": "n054",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n157__hyp",
+   "current_hypothesis": "Measured strategy results on meta-llama/Llama-2-13b-chat-hf, arc.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

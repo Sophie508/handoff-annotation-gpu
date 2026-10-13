@@ -1,0 +1,172 @@
+{
+ "tree_id": "C/gpu/activation_control",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "activation_control",
+ "question": "Activation interventions can increase generated reasoning length with useful accuracy gains beyond prompting alone.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "n000": {
+   "id": "n000",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "active",
+   "current_hypothesis": "Activation interventions can increase generated reasoning length with useful accuracy gains beyond prompting alone.",
+   "key_evidence": [
+    "Task specifies four Qwen-family 7B models, GSM8K and MMLU, four prompt strategies, and scheduled GPU execution."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Model access, GPU runtime, and capped agent budget may limit coverage."
+   ],
+   "tools_called": [
+    "task instruction"
+   ]
+  },
+  "n004": {
+   "id": "n004",
+   "parent": "n000",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "The installed runtime can support direct activation hooks.",
+   "key_evidence": [
+    "Module discovery found torch, transformers, datasets, accelerate, huggingface_hub.",
+    "Initial budget check reported $0 usage of $5."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Importability and model access remain untested until GPU job."
+   ],
+   "tools_called": [
+    "importlib.util.find_spec",
+    "python tools/budget_status.py"
+   ]
+  },
+  "n005": {
+   "id": "n005",
+   "parent": "n000",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n005",
+   "current_hypothesis": "Prompt wording alone may increase length without improving exact-match accuracy.",
+   "key_evidence": [
+    "Four required prompt conditions will be paired on the same 24 questions per dataset and model."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n007": {
+   "id": "n007",
+   "parent": "n005",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Signed steering and a norm-matched random control can test directional specificity.",
+   "key_evidence": [
+    "Add +/-0.10 times mean calibration residual norm in a unit contrast direction; random direction uses same norm.",
+    "Apply at middle-layer output, last prompt token and each autoregressive decoding token.",
+    "Controls use the standard prompt; direction calibration uses no answer labels."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Single layer and strength do not establish optimality.",
+    "Random control has one seed."
+   ],
+   "tools_called": ""
+  },
+  "n008": {
+   "id": "n008",
+   "parent": "n005",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Paired tests and explicit truncation metrics distinguish extra output from improved answers.",
+   "key_evidence": [
+    "24 GSM8K test and 24 abstract_algebra MMLU test questions sampled with seed 20261001.",
+    "Measure final-answer EM, generated token length, step-marker and equation-line proxies, repetition, truncation, elapsed time, and paired accuracy changes."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Small sample size; textual depth proxies are not semantic reasoning-depth judgments.",
+    "Cap may censor long reasoning, especially distilled model."
+   ],
+   "tools_called": ""
+  },
+  "n009": {
+   "id": "n009",
+   "parent": "n000",
+   "node_type": "EXPERIMENT",
+   "status": "active",
+   "current_hypothesis": "One independent 7B model per A10 can execute the paired design within the scheduled allocation.",
+   "key_evidence": [
+    "Created and syntax-checked experiment.py.",
+    "Submitted registered job 1495458 through tools/cluster_job.py.",
+    "Each worker uses a single explicitly allocated logical CUDA device with BF16 weights; CUDA_VISIBLE_DEVICES is unchanged."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Weights and dataset access not yet verified.",
+    "Each model must fit its own 24GB GPU."
+   ],
+   "tools_called": [
+    "python -m py_compile",
+    "python tools/cluster_job.py submit -- python experiment.py"
+   ]
+  },
+  "report_01a1071f-4f6c-73f3-9698-aa3a34268848": {
+   "id": "report_01a1071f-4f6c-73f3-9698-aa3a34268848",
+   "parent": "n000",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Synthesize the measured experiment outputs with their limitations.",
+   "key_evidence": [
+    "report_evidence.json",
+    "final_answer.md"
+   ],
+   "lessons": [
+    "Three models completed, but ZekaiZ123/R1-distill-Qwen-7B failed to load. Limited samples, answer-parsing failures, and missing depth and computational-efficiency measurements prevent a general conclusion about efficient long-chain reasoning."
+   ],
+   "main_risk": [
+    "Requested ZekaiZ123/R1-distill-Qwen-7B failed at model loading; three other models completed 336 generations each.",
+    "Only 24 GSM8K test and 24 MMLU abstract-algebra test examples per model; greedy decoding, maximum 1024 new tokens.",
+    "Strict final-answer-marker exact match is primary; relaxed parsing is a sensitivity analysis, not a replacement endpoint.",
+    "Exploratory multiple comparisons; correlation of response length and correctness does not establish a causal accuracy benefit."
+   ],
+   "tools_called": [
+    "Existing experiment statistics; final agent synthesis"
+   ]
+  },
+  "n004__hyp": {
+   "id": "n004__hyp",
+   "parent": "n000",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=n004__hyp",
+   "current_hypothesis": "The installed runtime can support direct activation hooks.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n007__hyp": {
+   "id": "n007__hyp",
+   "parent": "n005",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Signed steering and a norm-matched random control can test directional specificity.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n008__hyp": {
+   "id": "n008__hyp",
+   "parent": "n005",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Paired tests and explicit truncation metrics distinguish extra output from improved answers.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

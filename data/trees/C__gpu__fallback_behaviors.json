@@ -1,0 +1,318 @@
+{
+ "tree_id": "C/gpu/fallback_behaviors",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "fallback_behaviors",
+ "question": "Models may express uncertainty through abstention, hedging, clarification, unsupported answers, or task drift.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "ROOT": {
+   "id": "ROOT",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "active",
+   "current_hypothesis": "Models may express uncertainty through abstention, hedging, clarification, unsupported answers, or task drift.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Behavior is not a direct readout of internal uncertainty."
+   ],
+   "tools_called": ""
+  },
+  "budget": {
+   "id": "budget",
+   "parent": "ROOT",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Local experiments avoid inference API costs.",
+   "key_evidence": [
+    "Initial budget_status: $0 reported usage, $5 remaining."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Agent calls also consume the task budget."
+   ],
+   "tools_called": [
+    "python tools/budget_status.py"
+   ]
+  },
+  "behavior": {
+   "id": "behavior",
+   "parent": "ROOT",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "active · 合并了 2 个同父同类节点，代表节点 id=behavior",
+   "current_hypothesis": "How do fallback behaviors vary with presumed difficulty, prompt policy, and supplied evidence?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": [
+    "Small hand-authored dataset; base models may fail QA formatting."
+   ],
+   "tools_called": ""
+  },
+  "design": {
+   "id": "design",
+   "parent": "behavior",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Paired neutral, cautious, and reference-supported prompts can separate prompt sensitivity from item difficulty.",
+   "key_evidence": [
+    "40 fixed items: 10 easy, 10 obscure, 10 unanswerable/false-premise, 10 ambiguous.",
+    "Three conditions per item; 120 greedy generations per model; max 64 new tokens.",
+    "Neutral: Question/Answer format. Cautious: allow uncertainty or clarification. Supported: neutral plus item-specific reference."
+   ],
+   "lessons": [
+    "Supported factual responses measure copying/use of evidence, not acquired factual knowledge."
+   ],
+   "main_risk": [
+    "Difficulty labels not independently validated. No recent-events stratum. References and factual keys authored without external verification."
+   ],
+   "tools_called": [
+    "build_data.py"
+   ]
+  },
+  "prior_job": {
+   "id": "prior_job",
+   "parent": "ROOT",
+   "node_type": "EXPERIMENT",
+   "status": "pruned · 合并了 3 个同父同类节点，代表节点 id=prior_job",
+   "current_hypothesis": "Previous scheduled attempt has no usable experimental output.",
+   "key_evidence": [
+    "Helper reports job 1497426 left_queue with exit_status null; no model outputs saved. User reports allocation wrapper subsequently fixed."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Prior exit reason was not established."
+   ],
+   "tools_called": [
+    "python tools/cluster_job.py status"
+   ]
+  },
+  "recovery_budget": {
+   "id": "recovery_budget",
+   "parent": "budget",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Remaining budget supports analysis of GPU-only trials.",
+   "key_evidence": [
+    "Reported usage $0.6186275; remaining $4.3813725."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "python tools/budget_status.py"
+   ]
+  },
+  "run_0": {
+   "id": "run_0",
+   "parent": "design",
+   "node_type": "EXPERIMENT",
+   "status": "active · 合并了 5 个同父同类节点，代表节点 id=run_0",
+   "current_hypothesis": "Measure responses and first-token entropy for EleutherAI/pythia-70m",
+   "key_evidence": [
+    "120 paired prompts; greedy decoding; no few-shot demonstrations."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Base-model continuation behavior may dominate uncertainty behavior."
+   ],
+   "tools_called": [
+    "Transformers on scheduled GPUs"
+   ]
+  },
+  "result_0": {
+   "id": "result_0",
+   "parent": "run_0",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Model run completed.",
+   "key_evidence": [
+    "outputs_0.jsonl: 120 generations",
+    "Elapsed seconds: 24.7",
+    "Revision: a39f36b100fe8a5377810d56c3f4789b9c53ac42"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py"
+   ]
+  },
+  "resume_result_1": {
+   "id": "resume_result_1",
+   "parent": "run_0",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Model run completed.",
+   "key_evidence": [
+    "outputs_1.jsonl: 120 generations",
+    "Elapsed seconds: 30.9",
+    "Revision: 9879c9b5f8bea9051dcb0e68dff21493d67e9d4f"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py"
+   ]
+  },
+  "resume_result_2": {
+   "id": "resume_result_2",
+   "parent": "run_0",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Model run completed.",
+   "key_evidence": [
+    "outputs_2.jsonl: 120 generations",
+    "Elapsed seconds: 30.9",
+    "Revision: fedc38a16eea3bd36a96b906d78d11d2ce18ed79"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py"
+   ]
+  },
+  "resume_result_3": {
+   "id": "resume_result_3",
+   "parent": "run_0",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Model run completed.",
+   "key_evidence": [
+    "outputs_3.jsonl: 120 generations",
+    "Elapsed seconds: 59.8",
+    "Revision: c0e3eee36dc47af0c49f361c74cfe459c09f7f23"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py"
+   ]
+  },
+  "output_validation": {
+   "id": "output_validation",
+   "parent": "design",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Four model response files are complete.",
+   "key_evidence": [
+    "outputs_0.jsonl through outputs_3.jsonl each contain 120 rows.",
+    "Job 1502993 produced the three missing model runs. Saved 70m measurements were preserved."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Helper reported no exit-status record for current job at inspection time; scientific completion is supported by complete response files and per-model completion nodes."
+   ],
+   "tools_called": [
+    "JSONL row counts; tree result nodes"
+   ]
+  },
+  "rubric": {
+   "id": "rubric",
+   "parent": "behavior",
+   "node_type": "PLAN",
+   "status": "complete",
+   "current_hypothesis": "Measure response markers without treating them as latent confidence.",
+   "key_evidence": [
+    "analyze.py scores initial-answer alias presence on 20 factual items per condition. It detects initial-answer lexical hedging, abstention, clarification and refusal; full-output QA continuation and repeated four-grams (count >=3).",
+    "Initial answer ends before the next Q/A role marker; leading A: is removed. Labels may overlap.",
+    "Manual audit will cover all 80 neutral nonfactual answers; alias scores are relaxed answer-key retrieval, not whole-response truth."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Heuristic markers miss paraphrases and can produce false positives. Exact answer mentions may coexist with false supporting claims. Repetition and entropy do not prove uncertainty."
+   ],
+   "tools_called": [
+    "analyze.py"
+   ]
+  },
+  "report_01a1071f-4f68-71f1-9b20-97a5020d7f4b": {
+   "id": "report_01a1071f-4f68-71f1-9b20-97a5020d7f4b",
+   "parent": "ROOT",
+   "node_type": "INFERENCE",
+   "status": "complete",
+   "current_hypothesis": "Synthesize the measured experiment outputs with their limitations.",
+   "key_evidence": [
+    "report_evidence.json",
+    "final_answer.md"
+   ],
+   "lessons": [
+    "The supplied experiments cover only four Pythia base models; requested cross-family, additional-size, and instruction-tuned comparisons remain unmeasured. Final synthesis is complete using only the supplied evidence."
+   ],
+   "main_risk": [
+    "Other requested families/sizes not executed; this is a four-size Pythia pilot.",
+    "Only20 factual items per model-condition; authored questions and correctness keys lack independent external validation.",
+    "Base-model continuation/repetition, 64-token truncation, prompt wording, and lexical label heuristics limit claims about epistemic uncertainty.",
+    "Supported-condition gains include direct use/copying of supplied references; not evidence of newly acquired knowledge."
+   ],
+   "tools_called": [
+    "Existing experiment statistics; final agent synthesis"
+   ]
+  },
+  "budget__hyp": {
+   "id": "budget__hyp",
+   "parent": "ROOT",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 7 个同父同类节点，代表节点 id=budget__hyp",
+   "current_hypothesis": "Local experiments avoid inference API costs.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "design__hyp": {
+   "id": "design__hyp",
+   "parent": "behavior",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Paired neutral, cautious, and reference-supported prompts can separate prompt sensitivity from item difficulty.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "recovery_budget__hyp": {
+   "id": "recovery_budget__hyp",
+   "parent": "budget",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Remaining budget supports analysis of GPU-only trials.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "run_0__hyp": {
+   "id": "run_0__hyp",
+   "parent": "design",
+   "node_type": "HYPOTHESIS",
+   "status": "active · 合并了 5 个同父同类节点，代表节点 id=run_0__hyp",
+   "current_hypothesis": "Measure responses and first-token entropy for EleutherAI/pythia-70m",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "result_0__hyp": {
+   "id": "result_0__hyp",
+   "parent": "run_0",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Model run completed.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "rubric__hyp": {
+   "id": "rubric__hyp",
+   "parent": "behavior",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Measure response markers without treating them as latent confidence.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

@@ -1,0 +1,550 @@
+{
+ "name": "GPU trajectory annotation subset (10 trees, 76 items)",
+ "selection": {
+  "structure": "one section per GPU task, merged 7-type trees",
+  "granularity": "leaf nodes in the merged tree, depth>=2, capped at 8 per tree",
+  "criterion": "no machine labeler has run on this dataset yet, so there is no flip signal to prioritize by; picks one node per type first (RESEARCH_PROBLEM..INFERENCE order) then round-robins by type until the cap, ties broken by node id — a deterministic diversity sample, not a judgment call",
+  "min_depth": 2,
+  "cap_per_tree": 8
+ },
+ "sections": [
+  {
+   "order": 1,
+   "tree_id": "C/gpu/activation_control",
+   "dataset": "C",
+   "task": "activation_control",
+   "task_type": "gpu_traj",
+   "n_items": 4
+  },
+  {
+   "order": 2,
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "dataset": "C",
+   "task": "cot_faithfulness_gaps",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 3,
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "dataset": "C",
+   "task": "counterfactual_simulatability",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 4,
+   "tree_id": "C/gpu/fallback_behaviors",
+   "dataset": "C",
+   "task": "fallback_behaviors",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 5,
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "dataset": "C",
+   "task": "fractal_complexity_of_language",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 6,
+   "tree_id": "C/gpu/introspective_learning",
+   "dataset": "C",
+   "task": "introspective_learning",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 7,
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "dataset": "C",
+   "task": "llm_confidence_elicitation",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 8,
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "dataset": "C",
+   "task": "llms_lack_self_correction",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 9,
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "dataset": "C",
+   "task": "lost_in_the_middle",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  },
+  {
+   "order": 10,
+   "tree_id": "C/gpu/premise_order_effects",
+   "dataset": "C",
+   "task": "premise_order_effects",
+   "task_type": "gpu_traj",
+   "n_items": 8
+  }
+ ],
+ "items": [
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/activation_control",
+   "node_id": "n007__hyp",
+   "section": 1
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/activation_control",
+   "node_id": "n007",
+   "section": 1
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/activation_control",
+   "node_id": "n008__hyp",
+   "section": 1
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/activation_control",
+   "node_id": "n008",
+   "section": 1
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "artifact_validation__hyp",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "artifact_validation",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "identity_verified",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "faithfulness_synthesis",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "budget_initial__hyp",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "job1_failure",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "label_m1_q43_metadata_wrong",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/cot_faithfulness_gaps",
+   "node_id": "sensitivity_analysis",
+   "section": 2
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "CALL_m0_nli_0_original__hyp",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "CALL_m0_nli_0_original",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "EXTRACT_DISCORDANCES",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "QA_LENGTH_REVISION",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "EXTRACT_NLI__hyp",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "CALL_m0_qa_0_original",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "EXTRACT_NLI",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/counterfactual_simulatability",
+   "node_id": "EXTRACT_QA_0__hyp",
+   "section": 3
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "design__hyp",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "rubric",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "output_validation",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "recovery_budget__hyp",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "recovery_budget",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "result_0__hyp",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "result_0",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fallback_behaviors",
+   "node_id": "rubric__hyp",
+   "section": 4
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n012__hyp",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n013",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n055",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n013__hyp",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n014",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n056",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n014__hyp",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/fractal_complexity_of_language",
+   "node_id": "n027",
+   "section": 5
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n029__hyp",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n029",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n043",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n200",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n200__hyp",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n203",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n211",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/introspective_learning",
+   "node_id": "n340",
+   "section": 6
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n015__hyp",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n015",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n093",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n037",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n084",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n016__hyp",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n038",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llm_confidence_elicitation",
+   "node_id": "n085",
+   "section": 7
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "budget0__hyp",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "budget_stop_gpt-4_extension",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "job_1500538",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "aggregate_audit",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "budget_estimate__hyp",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "job_1500539",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "extension_complete",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/llms_lack_self_correction",
+   "node_id": "budget_stop_gpt-4_extension__hyp",
+   "section": 8
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n018__hyp",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n057",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n018",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n019__hyp",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n019",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n043__hyp",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n046",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/lost_in_the_middle",
+   "node_id": "n044__hyp",
+   "section": 9
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "A1E__hyp",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "J1",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "A1E",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "LIM1",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "A1__hyp",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "L1F",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "A2E",
+   "section": 10
+  },
+  {
+   "dataset": "C",
+   "tree_id": "C/gpu/premise_order_effects",
+   "node_id": "SY2",
+   "section": 10
+  }
+ ]
+}

@@ -1,0 +1,427 @@
+{
+ "tree_id": "C/gpu/lost_in_the_middle",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "lost_in_the_middle",
+ "question": "Normalized exact-match QA accuracy depends on the position of the sole gold passage within 20 documents.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "n000": {
+   "id": "n000",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "needs_review",
+   "current_hypothesis": "Normalized exact-match QA accuracy depends on the position of the sole gold passage within 20 documents.",
+   "key_evidence": [
+    "Required design: 50 questions at each of 20 positions; requested five model variants."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Legacy model availability and $5 lifetime budget may prevent every requested comparison."
+   ],
+   "tools_called": [
+    "workspace file discovery"
+   ]
+  },
+  "n002": {
+   "id": "n002",
+   "parent": "n000",
+   "node_type": "PLAN",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n002",
+   "current_hypothesis": "A within-question design isolates the effect of moving the gold passage.",
+   "key_evidence": [
+    "Select 50 questions with seed 20261003; use identical question IDs at positions 1–20."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Must verify distractor order and labels across source files."
+   ],
+   "tools_called": ""
+  },
+  "n006": {
+   "id": "n006",
+   "parent": "n000",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n006",
+   "current_hypothesis": "The full GPT-3.5 run may fit within the remaining credit.",
+   "key_evidence": [
+    "Budget endpoint reports usage $0 and remaining $5.",
+    "At 3000 input + 32 output tokens, 1000 calls cost about $1.55; actual lengths remain unmeasured."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Agent costs and actual prompt lengths can reduce available budget."
+   ],
+   "tools_called": [
+    "python tools/budget_status.py"
+   ]
+  },
+  "n014": {
+   "id": "n014",
+   "parent": "n000",
+   "node_type": "EXPERIMENT",
+   "status": "pruned · 合并了 5 个同父同类节点，代表节点 id=n014",
+   "current_hypothesis": "The first scheduled job failed before Python started.",
+   "key_evidence": [
+    "Job 1500543 left queue without an exit record; scheduler log: CUDA_VISIBLE_DEVICES: No GPUs were assigned by UGE.",
+    "No data or predictions produced.",
+    "scheduler_failure_1500543.txt"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py submit/wait/status",
+    "own job stdout"
+   ]
+  },
+  "n018": {
+   "id": "n018",
+   "parent": "n002",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n018",
+   "current_hypothesis": "Actual gold passage records omit the optional document id.",
+   "key_evidence": [
+    "Inspected one JSONL row: gold passage has title/text/isgold but no id; strict id indexing caused KeyError.",
+    "All pinned asset downloads finished with verified hashes before failure."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "read one dataset record"
+   ]
+  },
+  "n019": {
+   "id": "n019",
+   "parent": "n002",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "API-only scheduling succeeded, while GPU visibility remains absent.",
+   "key_evidence": [
+    "Job 1500585 ran Python on qa-a10-034; job_entry reports cuda_visible_devices=null.",
+    "Did not initialize CUDA or load any local model."
+   ],
+   "lessons": [
+    "Local GPU experiments cannot safely proceed under the provided visibility contract."
+   ],
+   "main_risk": [
+    "LongChat full positional comparison remains unavailable."
+   ],
+   "tools_called": ""
+  },
+  "n043": {
+   "id": "n043",
+   "parent": "n014",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "GPT-3.5 experiment produced persistent predictions.",
+   "key_evidence": [
+    "1000/1000 successful calls; errors this execution=0.",
+    "Raw outputs and per-call usage in results_gpt35.jsonl and api_usage.jsonl."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Alias may route across providers; no dated snapshot guaranteed."
+   ],
+   "tools_called": ""
+  },
+  "n044": {
+   "id": "n044",
+   "parent": "n043",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete",
+   "current_hypothesis": "Does positional variation coexist with answerability from the gold passage and closed-book knowledge?",
+   "key_evidence": [
+    "Supplementary controls: same 50 questions; one gold document or no documents; same requested model, temperature and response cap."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Designed after completion of main calls but before inspecting accuracy; not part of the predefined primary contrast."
+   ],
+   "tools_called": ""
+  },
+  "n045": {
+   "id": "n045",
+   "parent": "n044",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Gold-only and closed-book controls characterize answerability.",
+   "key_evidence": [
+    "100 additional serial calls requested."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "LLMInference"
+   ]
+  },
+  "n046": {
+   "id": "n046",
+   "parent": "n045",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Control predictions persisted.",
+   "key_evidence": [
+    "100 calls completed.",
+    "controls_gpt35.jsonl"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n047": {
+   "id": "n047",
+   "parent": "n043",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=n047",
+   "current_hypothesis": "Paired analysis estimates the position effect without treating 1000 calls as independent questions.",
+   "key_evidence": [
+    "50x20 complete matrix; normalization recomputed from every raw response.",
+    "{\"primary_edges_minus_middle\": {\"left_positions\": [1, 20], \"right_positions\": [10, 11], \"left_accuracy\": 0.45, \"right_accuracy\": 0.43, \"mean\": 0.02, \"ci95\": [-0.05, 0.09]}, \"first_minus_last\": {\"left_positions\": [1], \"right_positions\": [20], \"left_accuracy\": 0.5, \"right_accuracy\": 0.4, \"mean\": 0.1, \"ci95\": [0.0, 0.2]}, \"early3_minus_middle4\": {\"left_positions\": [1, 2, 3], \"right_positions\": [9, 10, 11, 12], \"left_accuracy\": 0.48, \"right_accuracy\": 0.425, \"mean\": 0.05499999999999999, \"ci95\": [-0.006666666666666667, 0.12833333333333333]}, \"late3_minus_middle4\": {\"left_positions\": [18, 19, 20], \"right_positions\": [9, 10, 11, 12], \"left_accuracy\": 0.3933333333333333, \"right_accuracy\": 0.425, \"mean\": -0.031666666666666676, \"ci95\": [-0.08833333333333333, 0.01666666666666666]}}",
+    "summary.json; position_accuracy.csv; accuracy_matrix.npy"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Only 50 independent question clusters; bootstrap conditions on this prompt and model deployment."
+   ],
+   "tools_called": [
+    "numpy; scipy; question-cluster bootstrap, 10000 resamples"
+   ]
+  },
+  "n048": {
+   "id": "n048",
+   "parent": "n047",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Supplementary controls and output diagnostics constrain interpretation.",
+   "key_evidence": [
+    "{\"oracle\": {\"n\": 50, \"correct\": 36, \"accuracy\": 0.72, \"ci95\": [0.5833487630404344, 0.8252582933408878]}, \"closed_book\": {\"n\": 50, \"correct\": 23, \"accuracy\": 0.46, \"ci95\": [0.3296965219222435, 0.5960112860084253]}}",
+    "{\"correct_at_all_positions\": 15, \"incorrect_at_all_positions\": 22, \"vary_by_position\": 13}",
+    "{\"normalized_answer_substring_count_not_em\": 505, \"output_tokens_at_cap\": 19}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Substring match is descriptive only and can credit erroneous answers; primary metric remains exact match."
+   ],
+   "tools_called": ""
+  },
+  "n051": {
+   "id": "n051",
+   "parent": "n047",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Endpoint repeats and expanded response caps assess measurement stability.",
+   "key_evidence": [
+    "100 repeats: all 50 questions at positions 1 and 20; 19 capped cases rerun with max_tokens 128.",
+    "Original 1000-call results remain unchanged."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "serial OpenRouter LLMInference"
+   ]
+  },
+  "n052": {
+   "id": "n052",
+   "parent": "n051",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Measurement-stability audit completed.",
+   "key_evidence": [
+    "{\"repeat_n\": 100, \"repeat_raw_text_changes\": 4, \"repeat_em_changes\": 1, \"repeat_endpoint_accuracy\": {\"1\": {\"n\": 50, \"correct\": 24}, \"20\": {\"n\": 50, \"correct\": 20}}, \"cap_reruns_n\": 19, \"cap_reruns_original_correct\": 0, \"cap_reruns_correct\": 0, \"cap_reruns_still_at_cap\": 15, \"omnibus_permutation\": {\"statistic\": \"sum of squared per-position success totals, equivalent ordering to Cochran Q with fixed question totals\", \"permutations\": 20000, \"seed\": 20261006, \"p_plus_one\": 0.010949452527373631}, \"control_paired_differences\": {\"oracle_minus_20doc_mean\": {\"mean\": 0.28300000000000003, \"ci95\": [0.139, 0.423]}, \"closed_book_minus_20doc_mean\": {\"mean\": 0.023, \"ci95\": [-0.08600000000000002, 0.13502499999999965]}}, \"additional_cost_usd\": 0.18126650000000005, \"budget\": {\"usage\": 3.626844, \"limit\": 5, \"limit_remaining\": 1.3731559999999998}}",
+    "audit_predictions.jsonl"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "One repeated endpoint pass cannot fully characterize provider variability; expanded-cap reruns are a diagnostic, not replacements."
+   ],
+   "tools_called": ""
+  },
+  "n054": {
+   "id": "n054",
+   "parent": "n043",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Exact match captures answer wording and scope as well as factual retrieval.",
+   "key_evidence": [
+    "Stork question: first=\"Bringing babies to new parents.\", last=\"birth and babies\".",
+    "Walk the Line question: first=\"Joaquin Phoenix\", last=\"Joaquin Phoenix and Reese Witherspoon\"; the answer list contains each name separately.",
+    "Little Shop of Horrors question: first=\"Audrey II\", last=\"Audrey Jr.\".",
+    "error_examples.json"
+   ],
+   "lessons": [
+    "Do not interpret every exact-match failure as inability to access the gold passage."
+   ],
+   "main_risk": [
+    "Examples were selected after observing outcomes; they are illustrative, not a representative error taxonomy."
+   ],
+   "tools_called": ""
+  },
+  "n057": {
+   "id": "n057",
+   "parent": "n047",
+   "node_type": "EXPERIMENT",
+   "status": "complete",
+   "current_hypothesis": "Artifacts cover all executed experiments and preserve the incomplete model scope.",
+   "key_evidence": [
+    "Research-tree validation passed: unique sequential IDs, one root, valid parents/children, required fields, terminal pruned nodes.",
+    "All five own-job logs and available exit records copied individually into job_evidence/.",
+    "Latest lifetime budget observation: usage $3.901503, remaining $1.098497; experimental cost $1.6710325.",
+    "completion.json is partial; no local inference results claimed."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "tree invariant checker",
+    "own-job log archive",
+    "budget_status.py"
+   ]
+  },
+  "n060": {
+   "id": "n060",
+   "parent": "n014",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "LongChat inference produced persistent predictions.",
+   "key_evidence": [
+    "1000/1000 observations.",
+    "results_longchat.jsonl"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n002__hyp": {
+   "id": "n002__hyp",
+   "parent": "n000",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=n002__hyp",
+   "current_hypothesis": "A within-question design isolates the effect of moving the gold passage.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n018__hyp": {
+   "id": "n018__hyp",
+   "parent": "n002",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n018__hyp",
+   "current_hypothesis": "Actual gold passage records omit the optional document id.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n019__hyp": {
+   "id": "n019__hyp",
+   "parent": "n002",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "API-only scheduling succeeded, while GPU visibility remains absent.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n043__hyp": {
+   "id": "n043__hyp",
+   "parent": "n014",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "GPT-3.5 experiment produced persistent predictions.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n044__hyp": {
+   "id": "n044__hyp",
+   "parent": "n043",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=n044__hyp",
+   "current_hypothesis": "Does positional variation coexist with answerability from the gold passage and closed-book knowledge?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n045__hyp": {
+   "id": "n045__hyp",
+   "parent": "n044",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Gold-only and closed-book controls characterize answerability.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n046__hyp": {
+   "id": "n046__hyp",
+   "parent": "n045",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Control predictions persisted.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n048__hyp": {
+   "id": "n048__hyp",
+   "parent": "n047",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Supplementary controls and output diagnostics constrain interpretation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n051__hyp": {
+   "id": "n051__hyp",
+   "parent": "n047",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Endpoint repeats and expanded response caps assess measurement stability.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n052__hyp": {
+   "id": "n052__hyp",
+   "parent": "n051",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Measurement-stability audit completed.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n057__hyp": {
+   "id": "n057__hyp",
+   "parent": "n047",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Artifacts cover all executed experiments and preserve the incomplete model scope.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n060__hyp": {
+   "id": "n060__hyp",
+   "parent": "n014",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "LongChat inference produced persistent predictions.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}

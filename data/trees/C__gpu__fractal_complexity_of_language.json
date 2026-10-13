@@ -1,0 +1,657 @@
+{
+ "tree_id": "C/gpu/fractal_complexity_of_language",
+ "dataset": "C",
+ "benchmark": "gpu_traj",
+ "subject_model": "gpu-local (multiple local HF models per task, see README.txt in collected_traj.zip)",
+ "task": "fractal_complexity_of_language",
+ "question": "Temperature, prompting, and model identity may alter the temporal scaling of token surprisal relative to paired human text.",
+ "source_format": "merged_7type",
+ "nodes": {
+  "n000": {
+   "id": "n000",
+   "parent": null,
+   "node_type": "RESEARCH_PROBLEM",
+   "status": "complete",
+   "current_hypothesis": "Temperature, prompting, and model identity may alter the temporal scaling of token surprisal relative to paired human text.",
+   "key_evidence": [
+    "Task requires an end-to-end experiment on pinned GAGLE excerpts."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Model availability, short signals, and estimator sensitivity may constrain conclusions."
+   ],
+   "tools_called": ""
+  },
+  "n005": {
+   "id": "n005",
+   "parent": "n000",
+   "node_type": "RESEARCH_QUESTION",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n005",
+   "current_hypothesis": "Do model, temperature, and prompt changes shift S/H relative to paired human continuations?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n008": {
+   "id": "n008",
+   "parent": "n000",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n008",
+   "current_hypothesis": "Prompt wrappers must be removed before matching human continuation.",
+   "key_evidence": [
+    "First prefix includes a misspelled article-length instruction before the literal article opening."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n010": {
+   "id": "n010",
+   "parent": "n000",
+   "node_type": "INFERENCE",
+   "status": "needs_probe · 合并了 4 个同父同类节点，代表节点 id=n010",
+   "current_hypothesis": "The missing allocation environment may be transient.",
+   "key_evidence": [
+    "First tracked job failed before entry into experiment.py."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n012": {
+   "id": "n012",
+   "parent": "n005",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 6 个同父同类节点，代表节点 id=n012",
+   "current_hypothesis": "A small synthetic check can expose estimator implementation failures despite unavailable GPU allocation.",
+   "key_evidence": [
+    "CPU-only sanity check: eight independent Gaussian signals and eight random walks, length 512, seed 20261003."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "This is not a natural-language experiment or a full calibration."
+   ],
+   "tools_called": [
+    "validate_small.py"
+   ]
+  },
+  "n013": {
+   "id": "n013",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Synthetic results test finite-scale scaling recovery.",
+   "key_evidence": [
+    "{\"kind\": \"white_noise\", \"S\": {\"n\": 8, \"mean\": 0.430984415994294, \"sd\": 0.10074826457747788}, \"H\": {\"n\": 8, \"mean\": 0.5190714623796951, \"sd\": 0.049229006988742496}, \"S_r2\": {\"n\": 8, \"mean\": 0.9861059348125335, \"sd\": 0.01050118489656962}, \"H_r2\": {\"n\": 8, \"mean\": 0.9923648686416673, \"sd\": 0.0035547558333687414}}",
+    "{\"kind\": \"random_walk\", \"S\": {\"n\": 8, \"mean\": 1.4250496603010023, \"sd\": 0.23011701080628802}, \"H\": {\"n\": 8, \"mean\": 1.492192028565418, \"sd\": 0.12698681188454086}, \"S_r2\": {\"n\": 8, \"mean\": 0.9977831294164695, \"sd\": 0.003830751606658468}, \"H_r2\": {\"n\": 8, \"mean\": 0.9956131341335778, \"sd\": 0.002229450471307229}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Eight replicates only; wavelet S is a global integrated-profile proxy, not a validated pointwise Holder exponent."
+   ],
+   "tools_called": ""
+  },
+  "n014": {
+   "id": "n014",
+   "parent": "n008",
+   "node_type": "EVIDENCE",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n014",
+   "current_hypothesis": "The prespecified article subset has exact literal prefix-to-human alignment.",
+   "key_evidence": [
+    "{\"records\": 100, \"unique_originals\": 100, \"selected\": 12, \"excluded_during_selection\": 26, \"data_sha256\": \"bfe73b4fb6e1bd00e9ec514a0bcd67438dda4acc4d3b21a6898340fe41a0e853\"}",
+    "Prepared results/selected.json; no human or model surprisal has been measured."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "validate_small.py"
+   ]
+  },
+  "n015": {
+   "id": "n015",
+   "parent": "n005",
+   "node_type": "INFERENCE",
+   "status": "complete · 合并了 46 个同父同类节点，代表节点 id=n015",
+   "current_hypothesis": "A reproducible factorial experiment and matched-score analysis are implemented.",
+   "key_evidence": [
+    "plan.md specifies 12 prefixes x 2 temperatures x 2 prompts per accessible requested model.",
+    "experiment.py preserves texts and token surprisal; analysis_experiment.py computes condition means/SD, paired contrasts, correlations, factor MI, shuffle controls and plots.",
+    "Only syntax checks and validate_small.py ran; model experiment and full analysis did not execute."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "GPU integration and model access remain untested."
+   ],
+   "tools_called": [
+    "python -m py_compile",
+    "local code construction"
+   ]
+  },
+  "n022": {
+   "id": "n022",
+   "parent": "n008",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Storage recovery permits another tracked execution using preserved experimental settings.",
+   "key_evidence": [
+    "Registered jobs 1499967, 1499981, 1502953 have left queue; no texts.jsonl or signals.jsonl exists.",
+    "Budget usage 2.3991175 USD; remaining 2.6008825 USD.",
+    "User identifies previous disk exhaustion as infrastructure failure and reports repaired wrapper."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py status",
+    "budget_status.py",
+    "results directory listing"
+   ]
+  },
+  "n025": {
+   "id": "n025",
+   "parent": "n022",
+   "node_type": "EXPERIMENT",
+   "status": "active",
+   "current_hypothesis": "Run missing end-to-end language experiment after infrastructure recovery.",
+   "key_evidence": [
+    "Submitting preserved experiment.py with registered helper."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py submit"
+   ]
+  },
+  "n027": {
+   "id": "n027",
+   "parent": "n015",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Human continuations align exactly with the generation prefix.",
+   "key_evidence": [
+    "Selected 12 unique articles; exact literal prefix stripped from human target.",
+    "Selection exclusions: 26"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n028": {
+   "id": "n028",
+   "parent": "n015",
+   "node_type": "EXPERIMENT",
+   "status": "active · 合并了 3 个同父同类节点，代表节点 id=n028",
+   "current_hypothesis": "GPT-3.5 temperature and prompting may alter signal scaling.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n029": {
+   "id": "n029",
+   "parent": "n028",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "API generation yielded actual continuations.",
+   "key_evidence": [
+    "Completed 48 of 48 planned outputs.",
+    "Experimental API cost USD 0.049880499999999994"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n031": {
+   "id": "n031",
+   "parent": "n028",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Local model generated factorial continuation texts.",
+   "key_evidence": [
+    "mistralai/Mistral-7B-Instruct-v0.3: 48 outputs"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n032": {
+   "id": "n032",
+   "parent": "n005",
+   "node_type": "EXPERIMENT",
+   "status": "active · 合并了 4 个同父同类节点，代表节点 id=n032",
+   "current_hypothesis": "A fixed scorer transforms human and generated continuations to comparable surprisal signals.",
+   "key_evidence": [
+    "mistralai/Mistral-7B-Instruct-v0.3; raw prefix context; scorer temperature 1; first up to 768 target tokens."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n033": {
+   "id": "n033",
+   "parent": "n032",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Teacher-forced surprisal signals are preserved.",
+   "key_evidence": [
+    "Scorer mistralai/Mistral-7B-Instruct-v0.3 total signals: 108"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n037": {
+   "id": "n037",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Calibration quantifies estimator bias and noise.",
+   "key_evidence": [
+    "{\"N\": 256, \"kind\": \"white_noise\", \"H\": {\"n\": 100, \"mean\": 0.5053050833307848, \"sd\": 0.07487353325745648}, \"S\": {\"n\": 100, \"mean\": 0.4739982952873186, \"sd\": 0.2317043267047882}, \"H_r2\": {\"n\": 100, \"mean\": 0.985074066149002, \"sd\": 0.010678218583337734}, \"S_r2\": {\"n\": 100, \"mean\": 0.9742625123229725, \"sd\": 0.04365756114831053}}",
+    "{\"N\": 256, \"kind\": \"random_walk\", \"H\": {\"n\": 100, \"mean\": 1.463710039590703, \"sd\": 0.14824355727979413}, \"S\": {\"n\": 100, \"mean\": 1.4583403776172765, \"sd\": 0.16079536312295709}, \"H_r2\": {\"n\": 100, \"mean\": 0.990264783120163, \"sd\": 0.008870840341162959}, \"S_r2\": {\"n\": 100, \"mean\": 0.9990565493480696, \"sd\": 0.0015791546246853568}}",
+    "{\"N\": 512, \"kind\": \"white_noise\", \"H\": {\"n\": 100, \"mean\": 0.49678559075666884, \"sd\": 0.04779135264244678}, \"S\": {\"n\": 100, \"mean\": 0.4328975504904827, \"sd\": 0.15351316547001476}, \"H_r2\": {\"n\": 100, \"mean\": 0.9888272197713799, \"sd\": 0.00720220933475617}, \"S_r2\": {\"n\": 100, \"mean\": 0.9807984306979419, \"sd\": 0.02494504103157278}}",
+    "{\"N\": 512, \"kind\": \"random_walk\", \"H\": {\"n\": 100, \"mean\": 1.4787011815826256, \"sd\": 0.09106545435058194}, \"S\": {\"n\": 100, \"mean\": 1.4718265373750778, \"sd\": 0.13084867738100786}, \"H_r2\": {\"n\": 100, \"mean\": 0.9951749228211321, \"sd\": 0.0046850337502572035}, \"S_r2\": {\"n\": 100, \"mean\": 0.9991314698004125, \"sd\": 0.0008949820917812294}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Only a short finite scale range is available."
+   ],
+   "tools_called": ""
+  },
+  "n052": {
+   "id": "n052",
+   "parent": "n025",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Recovered GPU execution completed and produced actual language measurements.",
+   "key_evidence": [
+    "Job 1503038 return code 0; elapsed 1584.94 seconds; four NVIDIA A10 devices recorded.",
+    "48 GPT-3.5 generations, 48 Mistral generations, 12 human continuations; 108 scored signals.",
+    "Gemma model-load OSError recorded; no Gemma generation or scoring.",
+    "Post-job total lifetime usage 2.7437215 USD."
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "cluster_job.py wait",
+    "results/run_complete.json",
+    "results/software.json",
+    "budget_status.py"
+   ]
+  },
+  "n054": {
+   "id": "n054",
+   "parent": "n015",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "At 512 tokens GPT-3.5 standard continuations have lower H than paired human continuations.",
+   "key_evidence": [
+    "Temperature 0.2 delta H -0.05596, bootstrap CI [-0.08247,-0.02894], n=12.",
+    "Temperature 1.2 delta H -0.06375, CI [-0.09794,-0.02759], n=12.",
+    "Every model-human S contrast includes zero."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Exploratory unadjusted intervals; a single scorer and 12 articles."
+   ],
+   "tools_called": ""
+  },
+  "n055": {
+   "id": "n055",
+   "parent": "n015",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "The narrow human range premise is estimator-dependent in this sample.",
+   "key_evidence": [
+    "512-token human H min/max 0.469/0.595; S min/max 0.001/0.762.",
+    "White-noise 512-token S mean 0.433 SD 0.154 shows finite-scale bias and variability."
+   ],
+   "lessons": "",
+   "main_risk": [
+    "S is global profile wavelet scaling, not pointwise Holder exponent."
+   ],
+   "tools_called": ""
+  },
+  "n056": {
+   "id": "n056",
+   "parent": "n015",
+   "node_type": "INFERENCE",
+   "status": "needs_review",
+   "current_hypothesis": "Temperature carries binned H information for Mistral without a clearly resolved mean shift.",
+   "key_evidence": [
+    "512-token MI 0.1164 nats, permutation p 0.00399; mean temperature H contrast +0.02873 with CI [-0.00630,0.06479]."
+   ],
+   "lessons": [
+    "Binned distribution dependence and a paired mean effect are different hypotheses."
+   ],
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n060": {
+   "id": "n060",
+   "parent": "n015",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Human continuations align exactly with the generation prefix.",
+   "key_evidence": [
+    "Selected 12 unique articles; exact literal prefix stripped from human target.",
+    "Selection exclusions: 26"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n061": {
+   "id": "n061",
+   "parent": "n015",
+   "node_type": "EXPERIMENT",
+   "status": "active · 合并了 3 个同父同类节点，代表节点 id=n061",
+   "current_hypothesis": "GPT-3.5 temperature and prompting may alter signal scaling.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n062": {
+   "id": "n062",
+   "parent": "n061",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "API generation yielded actual continuations.",
+   "key_evidence": [
+    "Completed 48 of 48 planned outputs.",
+    "Experimental API cost USD 0.0"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n064": {
+   "id": "n064",
+   "parent": "n061",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Local model generated factorial continuation texts.",
+   "key_evidence": [
+    "mistralai/Mistral-7B-Instruct-v0.3: 48 outputs"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n066": {
+   "id": "n066",
+   "parent": "n032",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Teacher-forced surprisal signals are preserved.",
+   "key_evidence": [
+    "Scorer mistralai/Mistral-7B-Instruct-v0.3 total signals: 108"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n068": {
+   "id": "n068",
+   "parent": "n061",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Local model generated factorial continuation texts.",
+   "key_evidence": [
+    "google/gemma-2b: 48 outputs"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n070": {
+   "id": "n070",
+   "parent": "n032",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Teacher-forced surprisal signals are preserved.",
+   "key_evidence": [
+    "Scorer google/gemma-2b total signals: 156"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n072": {
+   "id": "n072",
+   "parent": "n032",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Teacher-forced surprisal signals are preserved.",
+   "key_evidence": [
+    "Scorer mistralai/Mistral-7B-Instruct-v0.3 total signals: 156"
+   ],
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": [
+    "experiment.py scheduled job"
+   ]
+  },
+  "n074": {
+   "id": "n074",
+   "parent": "n012",
+   "node_type": "EVIDENCE",
+   "status": "complete",
+   "current_hypothesis": "Calibration quantifies estimator bias and noise.",
+   "key_evidence": [
+    "{\"N\": 256, \"kind\": \"white_noise\", \"H\": {\"n\": 100, \"mean\": 0.5053050833307848, \"sd\": 0.07487353325745648}, \"S\": {\"n\": 100, \"mean\": 0.4739982952873186, \"sd\": 0.2317043267047882}, \"H_r2\": {\"n\": 100, \"mean\": 0.985074066149002, \"sd\": 0.010678218583337734}, \"S_r2\": {\"n\": 100, \"mean\": 0.9742625123229725, \"sd\": 0.04365756114831053}}",
+    "{\"N\": 256, \"kind\": \"random_walk\", \"H\": {\"n\": 100, \"mean\": 1.463710039590703, \"sd\": 0.14824355727979413}, \"S\": {\"n\": 100, \"mean\": 1.4583403776172765, \"sd\": 0.16079536312295709}, \"H_r2\": {\"n\": 100, \"mean\": 0.990264783120163, \"sd\": 0.008870840341162959}, \"S_r2\": {\"n\": 100, \"mean\": 0.9990565493480696, \"sd\": 0.0015791546246853568}}",
+    "{\"N\": 512, \"kind\": \"white_noise\", \"H\": {\"n\": 100, \"mean\": 0.49678559075666884, \"sd\": 0.04779135264244678}, \"S\": {\"n\": 100, \"mean\": 0.4328975504904827, \"sd\": 0.15351316547001476}, \"H_r2\": {\"n\": 100, \"mean\": 0.9888272197713799, \"sd\": 0.00720220933475617}, \"S_r2\": {\"n\": 100, \"mean\": 0.9807984306979419, \"sd\": 0.02494504103157278}}",
+    "{\"N\": 512, \"kind\": \"random_walk\", \"H\": {\"n\": 100, \"mean\": 1.4787011815826256, \"sd\": 0.09106545435058194}, \"S\": {\"n\": 100, \"mean\": 1.4718265373750778, \"sd\": 0.13084867738100786}, \"H_r2\": {\"n\": 100, \"mean\": 0.9951749228211321, \"sd\": 0.0046850337502572035}, \"S_r2\": {\"n\": 100, \"mean\": 0.9991314698004125, \"sd\": 0.0008949820917812294}}"
+   ],
+   "lessons": "",
+   "main_risk": [
+    "Only a short finite scale range is available."
+   ],
+   "tools_called": ""
+  },
+  "n005__hyp": {
+   "id": "n005__hyp",
+   "parent": "n000",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 8 个同父同类节点，代表节点 id=n005__hyp",
+   "current_hypothesis": "Do model, temperature, and prompt changes shift S/H relative to paired human continuations?",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n012__hyp": {
+   "id": "n012__hyp",
+   "parent": "n005",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 5 个同父同类节点，代表节点 id=n012__hyp",
+   "current_hypothesis": "A small synthetic check can expose estimator implementation failures despite unavailable GPU allocation.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n013__hyp": {
+   "id": "n013__hyp",
+   "parent": "n012",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Synthetic results test finite-scale scaling recovery.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n014__hyp": {
+   "id": "n014__hyp",
+   "parent": "n008",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 2 个同父同类节点，代表节点 id=n014__hyp",
+   "current_hypothesis": "The prespecified article subset has exact literal prefix-to-human alignment.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n015__hyp": {
+   "id": "n015__hyp",
+   "parent": "n005",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 7 个同父同类节点，代表节点 id=n015__hyp",
+   "current_hypothesis": "A reproducible factorial experiment and matched-score analysis are implemented.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n022__hyp": {
+   "id": "n022__hyp",
+   "parent": "n008",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Storage recovery permits another tracked execution using preserved experimental settings.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n025__hyp": {
+   "id": "n025__hyp",
+   "parent": "n022",
+   "node_type": "HYPOTHESIS",
+   "status": "active",
+   "current_hypothesis": "Run missing end-to-end language experiment after infrastructure recovery.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n027__hyp": {
+   "id": "n027__hyp",
+   "parent": "n015",
+   "node_type": "HYPOTHESIS",
+   "status": "complete · 合并了 3 个同父同类节点，代表节点 id=n027__hyp",
+   "current_hypothesis": "Human continuations align exactly with the generation prefix.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n029__hyp": {
+   "id": "n029__hyp",
+   "parent": "n028",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "API generation yielded actual continuations.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n031__hyp": {
+   "id": "n031__hyp",
+   "parent": "n028",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Local model generated factorial continuation texts.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n033__hyp": {
+   "id": "n033__hyp",
+   "parent": "n032",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Teacher-forced surprisal signals are preserved.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n037__hyp": {
+   "id": "n037__hyp",
+   "parent": "n012",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Calibration quantifies estimator bias and noise.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n052__hyp": {
+   "id": "n052__hyp",
+   "parent": "n025",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "Recovered GPU execution completed and produced actual language measurements.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n054__hyp": {
+   "id": "n054__hyp",
+   "parent": "n015",
+   "node_type": "HYPOTHESIS",
+   "status": "complete",
+   "current_hypothesis": "At 512 tokens GPT-3.5 standard continuations have lower H than paired human continuations.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n055__hyp": {
+   "id": "n055__hyp",
+   "parent": "n015",
+   "node_type": "HYPOTHESIS",
+   "status": "needs_review",
+   "current_hypothesis": "The narrow human range premise is estimator-dependent in this sample.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  },
+  "n056__hyp": {
+   "id": "n056__hyp",
+   "parent": "n015",
+   "node_type": "HYPOTHESIS",
+   "status": "needs_review",
+   "current_hypothesis": "Temperature carries binned H information for Mistral without a clearly resolved mean shift.",
+   "key_evidence": "",
+   "lessons": "",
+   "main_risk": "",
+   "tools_called": ""
+  }
+ }
+}
