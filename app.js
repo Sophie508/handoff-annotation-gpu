@@ -7,10 +7,10 @@
 let LANG = localStorage.getItem('nda:lang') || 'zh';
 const UI = {
   zh: {
-    step_quiz:'偏好问卷', step_nodes:'节点标注', step_export:'导出',
+    step_nodes:'节点标注', step_export:'导出',
     prev:'上一组', next:'下一组', prev_node:'上一个', next_node:'下一个',
     setup_h:'开始之前',
-    setup_lede:'这份标注分两部分：先做一份约 15 分钟的偏好问卷，再对若干轨迹树节点独立打标。全程在你本机完成，结果不会自动上传——做完导出一个 zip，手动发回即可。',
+    setup_lede:'对若干轨迹树节点独立打标。全程在你本机完成，结果不会自动上传——做完导出一个 zip，手动发回即可。',
     setup_id:'标注者 ID',
     setup_id_hint:'只用这个 ID 标识你，不要填真实姓名或邮箱——本页面和它读取的数据都是公开的。',
     setup_mic:'麦克风',
@@ -42,7 +42,7 @@ const UI = {
     reason_h:'为什么这么判？勾选适用的（可多选）', reason_other:'其他（补充说明）',
     f_hyp:'这一步的假设 / claim', f_ev:'关键证据', f_risk:'主要风险',
     f_tools:'这一步做了什么（工具 / 命令）', f_lessons:'从这一步学到 / 得出的结论', f_status:'状态',
-    sum_id:'标注者 ID', sum_quiz:'问卷完成组数', sum_nodes:'已标节点数',
+    sum_id:'标注者 ID', sum_nodes:'已标节点数',
     sum_audio:'录音段数', sum_text:'文字说明数',
     exporting:'打包中…', exported:f=>`已下载 ${f}`,
     incomplete:'还有未完成的部分，但你仍然可以导出（未答的会留空）。',
@@ -51,7 +51,7 @@ const UI = {
     subset_ok:(n,t)=>`共 ${n} 个节点，来自 ${t} 棵树。改 data/subset.json 可换一批。`,
     draft_found:(id,n)=>`ID「${id}」，已完成 ${n} 项。录音也还在。`,
     confirm_discard:'确定丢弃草稿（含已录的音频）重新开始？',
-    step_learn:'怎么标', learn_back:'回到问卷', learn_next:'我明白了，开始标注',
+    step_learn:'怎么标', learn_next:'我明白了，开始标注',
     setup_consent:'知情同意',
     setup_consent_body:'这是一项研究用的标注任务。你的选择、文字说明和录音会被我们用于研究分析；录音会转成文字，转写后的内容可能出现在论文或报告里，但不会带上你的姓名。所有数据只存在你自己的电脑上，由你导出后手动发回，我们不会自动收集任何东西。你可以随时关掉页面退出，不需要给理由。',
     setup_consent_agree:'我已阅读并同意参与',
@@ -65,10 +65,10 @@ const UI = {
     spine_here:'你在这里'
   },
   en: {
-    step_quiz:'Quiz', step_nodes:'Node labeling', step_export:'Export',
+    step_nodes:'Node labeling', step_export:'Export',
     prev:'Previous', next:'Next', prev_node:'Previous', next_node:'Next',
     setup_h:'Before you start',
-    setup_lede:'Two parts: a ~15-minute preference quiz, then independent labeling of a set of trajectory-tree nodes. Everything runs on your machine and nothing is uploaded — at the end you download one zip and send it back.',
+    setup_lede:'Independent labeling of a set of trajectory-tree nodes. Everything runs on your machine and nothing is uploaded — at the end you download one zip and send it back.',
     setup_id:'Annotator ID',
     setup_id_hint:'You are identified only by this ID. Do not enter a real name or email — this page and its data are public.',
     setup_mic:'Microphone',
@@ -101,7 +101,7 @@ const UI = {
     reason_h:'Why this call? Check all that apply', reason_other:'Other (specify)',
     f_hyp:'Hypothesis / claim of this step', f_ev:'Key evidence', f_risk:'Main risk',
     f_tools:'What this step did (tools / commands)', f_lessons:'What it learned / concluded', f_status:'Status',
-    sum_id:'Annotator ID', sum_quiz:'Quiz groups done', sum_nodes:'Nodes labeled',
+    sum_id:'Annotator ID', sum_nodes:'Nodes labeled',
     sum_audio:'Recordings', sum_text:'Typed notes',
     exporting:'packing…', exported:f=>`downloaded ${f}`,
     incomplete:'Some parts are unfinished; you can still export (blanks stay blank).',
@@ -110,7 +110,7 @@ const UI = {
     subset_ok:(n,t)=>`${n} nodes from ${t} trees. Edit data/subset.json to change the set.`,
     draft_found:(id,n)=>`ID "${id}", ${n} items answered. Recordings are still here.`,
     confirm_discard:'Discard the draft (including recordings) and start over?',
-    step_learn:'How to label', learn_back:'Back to quiz', learn_next:'Got it — start labeling',
+    step_learn:'How to label', learn_next:'Got it — start labeling',
     setup_consent:'Consent',
     setup_consent_body:'This is an annotation task for research. Your choices, written notes and recordings will be used for research analysis; recordings will be transcribed, and the transcribed text may appear in a paper or report, but never with your name. All data stays on your own computer — you export it and send it back by hand, and nothing is collected automatically. You may close the page and stop at any time, without giving a reason.',
     setup_consent_agree:'I have read this and agree to take part',
@@ -1085,15 +1085,12 @@ async function doExport() {
 function renderExport() {
   const host = $('#exportSummary');
   host.innerHTML = '';
-  const quizDone = Object.values(State.quiz).filter(s => Object.keys(s.answers || {}).length).length;
   const nodesDone = Object.values(State.nodes).filter(n => n.label).length;
-  const texts = Object.values(State.quiz).filter(s => (s.rationale || '').trim()).length
-              + Object.values(State.nodes).filter(n => (n.rationale || '').trim()).length;
+  const texts = Object.values(State.nodes).filter(n => (n.rationale || '').trim()).length;
   AudioStore.keys().then(keys => {
     const mine = keys.filter(k => k.endsWith(State.annotatorId)).length;
     const rows = [
       [T('sum_id'), State.annotatorId, false],
-      [T('sum_quiz'), `${quizDone} / ${QUIZ.sections.length}`, quizDone < QUIZ.sections.length],
       [T('sum_nodes'), `${nodesDone} / ${NODEDATA.length}`, nodesDone < NODEDATA.length],
       [T('sum_audio'), mine, false],
       [T('sum_text'), texts, false],
@@ -1101,7 +1098,7 @@ function renderExport() {
     host.innerHTML = '';
     rows.forEach(([k, v, bad]) => host.append(el('div', { class: 'sumrow' + (bad ? ' bad' : '') },
       el('span', {}, k), el('span', { class: 'v' }, v))));
-    if (quizDone < QUIZ.sections.length || nodesDone < NODEDATA.length)
+    if (nodesDone < NODEDATA.length)
       host.append(el('p', { class: 'hint' }, T('incomplete')));
   });
   window.scrollTo(0, 0);
@@ -1109,13 +1106,12 @@ function renderExport() {
 
 // ───────────────────────────── navigation ─────────────────────────────
 function show(view) {
-  ['setup', 'quiz', 'learn', 'nodes', 'export'].forEach(v =>
+  ['setup', 'learn', 'nodes', 'export'].forEach(v =>
     $('#view-' + v).hidden = v !== view);
   $('#stepbar').hidden = view === 'setup';
   document.querySelectorAll('.step').forEach(b => {
     b.classList.toggle('active', b.dataset.goto === view);
   });
-  if (view === 'quiz') renderQuiz();
   if (view === 'learn') renderLearn();
   if (view === 'nodes') renderNode();
   if (view === 'export') renderExport();
@@ -1167,7 +1163,7 @@ async function init() {
     LANG = LANG === 'zh' ? 'en' : 'zh';
     localStorage.setItem('nda:lang', LANG);
     applyLang();
-    const cur = ['setup', 'quiz', 'learn', 'nodes', 'export'].find(v => !$('#view-' + v).hidden);
+    const cur = ['setup', 'learn', 'nodes', 'export'].find(v => !$('#view-' + v).hidden);
     show(cur);
   });
 
@@ -1192,7 +1188,7 @@ async function init() {
   }
   $('#resumeBtn').addEventListener('click', () => {
     State.load(); applyLang(); $('#consentBox').checked = !!(State.consent || {}).agreed;
-    $('#whoami').textContent = State.annotatorId; show('quiz');
+    $('#whoami').textContent = State.annotatorId; show('learn');
   });
   $('#discardBtn').addEventListener('click', async () => {
     if (!confirm(T('confirm_discard'))) return;
@@ -1219,17 +1215,9 @@ async function init() {
     State.startedAt ||= new Date().toISOString();
     State.save();
     $('#whoami').textContent = id;
-    show('quiz');
+    show('learn');
   });
 
-  $('#quizPrev').addEventListener('click', () => {
-    if (State.qi > 0) { State.qi--; State.save(); renderQuiz(); }
-  });
-  $('#quizNext').addEventListener('click', () => {
-    if (State.qi < QUIZ.sections.length - 1) { State.qi++; State.save(); renderQuiz(); }
-    else { State.save(); show('learn'); }
-  });
-  $('#learnBack').addEventListener('click', () => show('quiz'));
   $('#learnNext').addEventListener('click', () => show('nodes'));
   $('#nodePrev').addEventListener('click', () => {
     if (State.ni > 0) { State.ni--; State.save(); renderNode(); }

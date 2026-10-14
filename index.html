@@ -20,10 +20,9 @@
 </header>
 
 <nav class="steps" id="stepbar" hidden>
-  <button class="step" data-goto="quiz" type="button"><span class="n">1</span><span class="t" data-i18n="step_quiz">偏好问卷</span></button>
-  <button class="step" data-goto="learn" type="button"><span class="n">2</span><span class="t" data-i18n="step_learn">怎么标</span></button>
-  <button class="step" data-goto="nodes" type="button"><span class="n">3</span><span class="t" data-i18n="step_nodes">节点标注</span></button>
-  <button class="step" data-goto="export" type="button"><span class="n">4</span><span class="t" data-i18n="step_export">导出</span></button>
+  <button class="step" data-goto="learn" type="button"><span class="n">1</span><span class="t" data-i18n="step_learn">怎么标</span></button>
+  <button class="step" data-goto="nodes" type="button"><span class="n">2</span><span class="t" data-i18n="step_nodes">节点标注</span></button>
+  <button class="step" data-goto="export" type="button"><span class="n">3</span><span class="t" data-i18n="step_export">导出</span></button>
 </nav>
 
 <main>
@@ -31,7 +30,7 @@
 <!-- ───────────────────────── setup ───────────────────────── -->
 <section id="view-setup" class="view">
   <h1 data-i18n="setup_h">开始之前</h1>
-  <p class="lede" data-i18n="setup_lede">这份标注分两部分：先做一份约 15 分钟的偏好问卷，再对若干轨迹树节点独立打标。全程在你本机完成，结果不会自动上传——做完导出一个 zip，手动发回即可。</p>
+  <p class="lede" data-i18n="setup_lede">对若干轨迹树节点独立打标。全程在你本机完成，结果不会自动上传——做完导出一个 zip，手动发回即可。</p>
 
   <div class="card">
     <label class="fieldlabel" for="annotatorId" data-i18n="setup_id">标注者 ID</label>
@@ -74,22 +73,10 @@
   <button id="startBtn" class="primary big" type="button" data-i18n="setup_start">开始</button>
 </section>
 
-<!-- ───────────────────────── quiz ───────────────────────── -->
-<section id="view-quiz" class="view" hidden>
-  <div class="progress"><div class="bar" id="quizBar"></div></div>
-  <div class="progresstext" id="quizProgress"></div>
-  <div id="quizBody"></div>
-  <div class="navrow">
-    <button id="quizPrev" class="ghost" type="button" data-i18n="prev">上一组</button>
-    <button id="quizNext" class="primary" type="button" data-i18n="next">下一组</button>
-  </div>
-</section>
-
 <!-- ───────────────────────── learn ───────────────────────── -->
 <section id="view-learn" class="view" hidden>
   <div id="learnBody"></div>
   <div class="navrow">
-    <button id="learnBack" class="ghost" type="button" data-i18n="learn_back">回到问卷</button>
     <button id="learnNext" class="primary" type="button" data-i18n="learn_next">我明白了，开始标注</button>
   </div>
 </section>
