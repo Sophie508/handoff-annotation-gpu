@@ -13,6 +13,8 @@ const UI = {
     setup_lede:'对若干轨迹树节点独立打标。全程在你本机完成，结果不会自动上传——做完导出一个 zip，手动发回即可。',
     setup_id:'标注者 ID',
     setup_id_hint:'只用这个 ID 标识你，不要填真实姓名或邮箱——本页面和它读取的数据都是公开的。',
+    setup_papers:'发表过几篇被接收的论文',
+    setup_papers_hint:'填你目前为止被正式接收的论文总数（不限一作，各个作者位次都算）。这个数字之后会用来统一定级，不是现在就把你归到某一档。',
     setup_mic:'麦克风',
     setup_mic_hint:'每组题和每个节点后面可以录一段口头说明（也可以打字）。点下面按钮授权一次即可；不授权也能继续，只是只能打字。',
     setup_mic_btn:'授权麦克风', setup_subset:'待标节点',
@@ -25,6 +27,7 @@ const UI = {
     mic_ok:'已授权', mic_no:'未授权（可以只打字）', mic_fail:'授权失败或被拒绝——可以只打字',
     mic_insecure:'当前不是 https / localhost，浏览器不给麦克风。请用 python3 -m http.server 打开。',
     need_id:'请先填一个标注者 ID',
+    need_papers:'请先填一个非负整数（发表论文篇数，没有就填 0）',
     rec_start:'录音', rec_stop:'停止', rec_again:'重录', rec_del:'删掉', rec_ing:'录音中',
     rec_len:s=>`已录 ${s} 秒`, text_ph:'也可以打字说明（可选）',
     quiz_of:(a,b)=>`偏好问卷 · 第 ${a} / ${b} 组`,
@@ -42,7 +45,7 @@ const UI = {
     reason_h:'为什么这么判？勾选适用的（可多选）', reason_other:'其他（补充说明）',
     f_hyp:'这一步的假设 / claim', f_ev:'关键证据', f_risk:'主要风险',
     f_tools:'这一步做了什么（工具 / 命令）', f_lessons:'从这一步学到 / 得出的结论', f_status:'状态',
-    sum_id:'标注者 ID', sum_nodes:'已标节点数',
+    sum_id:'标注者 ID', sum_papers:'发表论文篇数', sum_nodes:'已标节点数',
     sum_audio:'录音段数', sum_text:'文字说明数',
     exporting:'打包中…', exported:f=>`已下载 ${f}`,
     incomplete:'还有未完成的部分，但你仍然可以导出（未答的会留空）。',
@@ -71,6 +74,8 @@ const UI = {
     setup_lede:'Independent labeling of a set of trajectory-tree nodes. Everything runs on your machine and nothing is uploaded — at the end you download one zip and send it back.',
     setup_id:'Annotator ID',
     setup_id_hint:'You are identified only by this ID. Do not enter a real name or email — this page and its data are public.',
+    setup_papers:'Accepted papers so far',
+    setup_papers_hint:'Total number of papers you have had officially accepted so far, any author position (not just first author). This number is used later to assign an experience level — it does not sort you into a tier here.',
     setup_mic:'Microphone',
     setup_mic_hint:'After each group of questions and each node you can record a short spoken note (typing works too). Grant access once below; you can continue without it and just type.',
     setup_mic_btn:'Grant microphone', setup_subset:'Nodes to label',
@@ -83,6 +88,7 @@ const UI = {
     mic_ok:'granted', mic_no:'not granted (typing still works)', mic_fail:'denied or failed — you can still type',
     mic_insecure:'Not https / localhost, so the browser blocks the microphone. Serve with python3 -m http.server.',
     need_id:'Enter an annotator ID first',
+    need_papers:'Enter a non-negative whole number of accepted papers (0 if none)',
     rec_start:'Record', rec_stop:'Stop', rec_again:'Re-record', rec_del:'Delete', rec_ing:'recording',
     rec_len:s=>`${s}s recorded`, text_ph:'or type your reasoning (optional)',
     quiz_of:(a,b)=>`Quiz · group ${a} / ${b}`,
@@ -101,7 +107,7 @@ const UI = {
     reason_h:'Why this call? Check all that apply', reason_other:'Other (specify)',
     f_hyp:'Hypothesis / claim of this step', f_ev:'Key evidence', f_risk:'Main risk',
     f_tools:'What this step did (tools / commands)', f_lessons:'What it learned / concluded', f_status:'Status',
-    sum_id:'Annotator ID', sum_nodes:'Nodes labeled',
+    sum_id:'Annotator ID', sum_papers:'Accepted papers', sum_nodes:'Nodes labeled',
     sum_audio:'Recordings', sum_text:'Typed notes',
     exporting:'packing…', exported:f=>`downloaded ${f}`,
     incomplete:'Some parts are unfinished; you can still export (blanks stay blank).',
@@ -174,14 +180,14 @@ const AudioStore = (() => {
 // ───────────────────────────── state ─────────────────────────────
 const DRAFT_KEY = 'nda:draft';
 const State = {
-  annotatorId: '', startedAt: null,
+  annotatorId: '', annotatorPapers: null, startedAt: null,
   quiz: {},           // sectionId -> {answers:{}, rationale:''}
   nodes: {},          // "tree|node" -> {label, rationale, shownAt, answeredAt}
   audio: {},          // recId -> {dur, mime, bytes}
   qi: 0, ni: 0,
   save() {
     localStorage.setItem(DRAFT_KEY, JSON.stringify({
-      annotatorId: this.annotatorId, startedAt: this.startedAt,
+      annotatorId: this.annotatorId, annotatorPapers: this.annotatorPapers, startedAt: this.startedAt,
       consent: this.consent, quiz: this.quiz, nodes: this.nodes, audio: this.audio,
       qi: this.qi, ni: this.ni,
       savedAt: new Date().toISOString()
@@ -202,6 +208,14 @@ const State = {
          + Object.values(this.nodes).filter(n => n.label).length;
   }
 };
+
+// 0-1 papers -> beginner, 2-3 -> junior, 4+ -> senior (agreed with collaborator 2026-10-20)
+function levelFromPapers(n) {
+  if (n == null || isNaN(n)) return '';
+  if (n <= 1) return 'beginner';
+  if (n <= 3) return 'junior';
+  return 'senior';
+}
 
 let QUIZ = null, INDEX = null, LEARN = null, SUBSET = [], SECTIONS = [], NODEDATA = [];
 let micGranted = false;
@@ -1037,6 +1051,8 @@ async function buildExport() {
 
   const results = {
     annotator_id: State.annotatorId,
+    annotator_papers: State.annotatorPapers,
+    annotator_level: levelFromPapers(State.annotatorPapers),
     started_at: State.startedAt, exported_at: now,
     quiz_version: QUIZ.version, ui_language: LANG, consent: State.consent,
     labelers: INDEX.labelers,
@@ -1055,7 +1071,7 @@ async function doExport() {
   zip.file('results.csv', csv);
   zip.file('README.txt',
     'Node-decision annotation export\n' +
-    `annotator: ${State.annotatorId}\nexported: ${results.exported_at}\n\n` +
+    `annotator: ${State.annotatorId} (papers: ${State.annotatorPapers}, level: ${levelFromPapers(State.annotatorPapers)})\nexported: ${results.exported_at}\n\n` +
     'results.json  full record incl. machine labels and derived parameters\n' +
     'results.csv   one row per quiz item / node\n' +
     'audio/        recordings; file names appear in the audio_file column\n');
@@ -1091,6 +1107,7 @@ function renderExport() {
     const mine = keys.filter(k => k.endsWith(State.annotatorId)).length;
     const rows = [
       [T('sum_id'), State.annotatorId, false],
+      [T('sum_papers'), State.annotatorPapers, false],
       [T('sum_nodes'), `${nodesDone} / ${NODEDATA.length}`, nodesDone < NODEDATA.length],
       [T('sum_audio'), mine, false],
       [T('sum_text'), texts, false],
@@ -1185,6 +1202,7 @@ async function init() {
     $('#resumeCard').hidden = false;
     $('#resumeInfo').textContent = T('draft_found')(draft.annotatorId, n);
     $('#annotatorId').value = draft.annotatorId;
+    if (draft.annotatorPapers != null) $('#annotatorPapers').value = draft.annotatorPapers;
   }
   $('#resumeBtn').addEventListener('click', () => {
     State.load(); applyLang(); $('#consentBox').checked = !!(State.consent || {}).agreed;
@@ -1209,9 +1227,13 @@ async function init() {
   $('#startBtn').addEventListener('click', () => {
     const id = $('#annotatorId').value.trim();
     if (!id) { alert(T('need_id')); return; }
+    const papersRaw = $('#annotatorPapers').value.trim();
+    const papers = Number(papersRaw);
+    if (papersRaw === '' || !Number.isInteger(papers) || papers < 0) { alert(T('need_papers')); return; }
     if (!$('#consentBox').checked) { alert(T('need_consent')); return; }
     State.consent = { agreed: true, at: new Date().toISOString() };
     State.annotatorId = id;
+    State.annotatorPapers = papers;
     State.startedAt ||= new Date().toISOString();
     State.save();
     $('#whoami').textContent = id;
