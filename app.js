@@ -1157,6 +1157,11 @@ async function loadAll() {
     const tree = treeCache.get(file);
     const node = tree.nodes[it.node_id];
     if (!node) { console.warn('missing node', it); continue; }
+    // Some converted gpu_traj nodes are a bare HYPOTHESIS restatement of a sibling
+    // node with no evidence of its own (id suffix "__hyp") -- nothing for an
+    // annotator to actually judge. Skip them defensively even if a future
+    // subset.json regeneration reintroduces them.
+    if (node.node_type === 'HYPOTHESIS' && !node.key_evidence) { console.warn('skipping empty-evidence HYPOTHESIS node', it); continue; }
     NODEDATA.push({ ...it, tree, node });
   }
   window.SUBSET_N = NODEDATA.length;   // for the e2e driver
